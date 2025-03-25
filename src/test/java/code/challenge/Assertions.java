@@ -4,10 +4,13 @@ import code.challenge.currency.Currency;
 import code.challenge.currency.EUR;
 import code.challenge.currency.USD;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Assertions {
-    public static void assertCloseTo(double expected, double actual, double allowedDelta) {
-        if (expected > actual+allowedDelta  || expected < actual-allowedDelta)
+    public static void assertCloseTo(BigDecimal expected, BigDecimal actual, double allowedDelta) {
+        if (expected.compareTo(actual.add(BigDecimal.valueOf(allowedDelta))) > 0
+                || expected.compareTo(actual.subtract(BigDecimal.valueOf(allowedDelta))) < 0)
             org.junit.jupiter.api.Assertions.fail();
     }
 

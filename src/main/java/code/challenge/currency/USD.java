@@ -2,18 +2,24 @@ package code.challenge.currency;
 
 import org.jetbrains.annotations.NotNull;
 
-public record USD(double amount) implements Currency {
+import java.math.BigDecimal;
+
+public record USD(BigDecimal amount) implements Currency {
+    public USD(double amount) {
+        this(BigDecimal.valueOf(amount));
+    }
+
     @Override
     @NotNull
-    public Currency add(double amount) {
-        return new USD(this.amount + amount);
+    public Currency add(BigDecimal amount) {
+        return new USD(this.amount.add(amount));
     }
 
     @Override
     @NotNull
     public Currency add(@NotNull Currency other) {
         if (getClass() == other.getClass())
-            return new USD(amount + ((USD) other).amount);
+            return new USD(amount.add(((USD) other).amount));
         else
             throw new UnsupportedOperationException("Interchanging currencies is not supported");
     }

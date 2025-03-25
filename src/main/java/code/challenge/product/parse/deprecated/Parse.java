@@ -5,6 +5,7 @@ import code.challenge.currency.EUR;
 import code.challenge.currency.USD;
 import code.challenge.product.deprecated.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -89,7 +90,7 @@ public final class Parse {
     }
 
     private static Currency parseCurrency(String TYPE, String amount) {
-        double _amount = Double.parseDouble(amount);
+        BigDecimal _amount = BigDecimal.valueOf(Double.parseDouble(amount));
 
         return switch (TYPE.toUpperCase()) {
             case "EUR" -> new EUR(_amount);

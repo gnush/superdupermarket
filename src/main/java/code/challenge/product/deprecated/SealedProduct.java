@@ -2,6 +2,7 @@ package code.challenge.product.deprecated;
 
 import code.challenge.currency.Currency;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public abstract sealed class SealedProduct permits SealedProduct.Lasting, Sealed
      * @return The daily accurate price
      */
     public Currency dailyPrice() {
-        return basePrice.add(0.1 * quality);
+        return basePrice.add(BigDecimal.valueOf(0.1).multiply(BigDecimal.valueOf(quality)));
     }
 
     /**

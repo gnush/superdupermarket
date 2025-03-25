@@ -7,6 +7,7 @@ import code.challenge.product.Product;
 import code.challenge.util.Tuple4;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ public class GeneralRules implements ProductRules {
 
     @Override
     public @NotNull Currency dailyPrice(@NotNull Product p) {
-        return p.basePrice.add(0.1 * p.getQuality());
+        return p.basePrice.add(BigDecimal.valueOf(0.1).multiply(BigDecimal.valueOf(p.getQuality())));
     }
 
     @Override
