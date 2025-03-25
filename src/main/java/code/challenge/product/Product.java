@@ -1,22 +1,26 @@
 package code.challenge.product;
 
+import code.challenge.SimulationContext;
 import code.challenge.currency.Currency;
 import code.challenge.observer.Observable;
-import code.challenge.observer.ProductQualityChange;
+import code.challenge.observer.ProductChange;
 import code.challenge.product.rule.ProductRules;
 import code.challenge.util.Tuple4;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public class Product extends Observable<Product, ProductQualityChange> {
+public class Product extends Observable<Product, ProductChange> {
     @NotNull public final String label;
     @NotNull public final Currency basePrice;
     @NotNull public final ExpirationDate expirationDate;
 
     private int quality;
     @NotNull private final ProductRules rules;
+
+    @NotNull private LocalDate lastDailyUpdate = LocalDate.now(SimulationContext.clock);
 
     private Product(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate, @NotNull ProductRules rules) {
         this.label = label;
@@ -49,7 +53,12 @@ public class Product extends Observable<Product, ProductQualityChange> {
      * Age by one day
      */
     public void dailyUpdate() {
-        rules.dailyUpdate(this);
+        var today = LocalDate.now(SimulationContext.clock);
+        if (lastDailyUpdate.isBefore(today)) {
+            rules.dailyUpdate(this);
+            lastDailyUpdate = today;
+            notifyObservers(this, ProductChange.DailyUpdate.getInstance());
+        }
     }
 
     public int getQuality() {
@@ -62,9 +71,9 @@ public class Product extends Observable<Product, ProductQualityChange> {
         this.quality = quality;
 
         if (change < 0)
-            this.notifyObservers(this, new ProductQualityChange.Increase(Math.abs(change)));
+            this.notifyObservers(this, new ProductChange.QualityIncrease(Math.abs(change)));
         else if (change > 0)
-            this.notifyObservers(this, new ProductQualityChange.Decrease(change));
+            this.notifyObservers(this, new ProductChange.QualityDecrease(change));
     }
 
     public @NotNull String pretty() {
