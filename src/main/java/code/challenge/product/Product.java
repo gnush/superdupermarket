@@ -86,7 +86,7 @@ public class Product extends Observable<Product, ProductChange> {
 
     @Override
     public @NotNull String toString() {
-        return String.format("%s: basePrice='%s' quality=%s, expiresOn=%s", label, basePrice, quality, expirationDate);
+        return String.format("%s: basePrice='%s' quality=%s expiresOn=%s", label, basePrice, quality, expirationDate);
     }
 
     @NotNull

@@ -1,10 +1,9 @@
 package code.challenge.product;
 
+import code.challenge.SimulationContext;
 import code.challenge.currency.EUR;
-import code.challenge.product.rule.BricksRules;
-import code.challenge.product.rule.CheeseRules;
-import code.challenge.product.rule.GeneralRules;
-import code.challenge.product.rule.WineRules;
+import code.challenge.product.rule.*;
+import code.challenge.product.rule.modular.SimpleRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,7 @@ public class ProductTest {
                     "Product",
                     new EUR(10),
                     42,
-                    new ExpirationDate.ExpiresAt(LocalDate.of(2000, 1, 1)),
+                    new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(1)),
                     new GeneralRules()
             );
     static Function<Integer, Optional<Product>> expiresIn = expiresIn ->
@@ -37,7 +36,7 @@ public class ProductTest {
                     "Product",
                     new EUR(10),
                     42,
-                    new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(expiresIn)),
+                    new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(expiresIn)),
                     new GeneralRules()
             );
 
@@ -66,7 +65,63 @@ public class ProductTest {
         assertEquals("Product", product.label);
         assertEquals(new EUR(10), product.basePrice);
         assertEquals(42, product.getQuality());
-        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.of(2000, 1, 1)), product.expirationDate);
+        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(1)), product.expirationDate);
+    }
+
+    @Test
+    @DisplayName("non-expirable product toString correct")
+    void generalNonExpirableProductToString() {
+        var maybeProduct = nonExpirableProduct.get();
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+
+        assertEquals(
+                String.format(
+                        "%s: basePrice='%s' quality=%s expiresOn=%s",
+                        product.label, product.basePrice, product.getQuality(), product.expirationDate
+                ),
+                product.toString());
+    }
+
+    @Test
+    @DisplayName("non-expirable product overview correct")
+    void generalNonExpirableProductOverview() {
+        var maybeProduct = nonExpirableProduct.get();
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+
+        assertEquals(
+                String.format(
+                        "%s: price='%s' quality=%s remove=%s",
+                        product.label, product.dailyPrice(), product.getQuality(), product.toRemove()),
+                product.overview());
+    }
+
+    @Test
+    @DisplayName("non-expirable product pretty correct")
+    void generalNonExpirableProductpretty() {
+        var maybeProduct = nonExpirableProduct.get();
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+
+        assertEquals(
+                String.format("%s (%s)\n%s", product.label, product.dailyPrice(), product.expirationDate),
+                product.pretty()
+        );
+    }
+
+    @Test
+    @DisplayName("non-expirable product using general rule set should not be removed")
+    void generalNonExpirableProductShouldNotBeRemoved(){
+        var maybeProduct = nonExpirableProduct.get();
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+
+        assertFalse(product.toRemove());
     }
 
     @Test
@@ -76,7 +131,7 @@ public class ProductTest {
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals("Product", product.label);
         assertEquals(new EUR(10), product.basePrice);
@@ -91,12 +146,12 @@ public class ProductTest {
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals("Product", product.label);
         assertEquals(new EUR(10), product.basePrice);
         assertEquals(42, product.getQuality());
-        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.of(2000, 1, 1)), product.expirationDate);
+        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(2)), product.expirationDate);
     }
 
     @Test
@@ -165,7 +220,7 @@ public class ProductTest {
                         "Cheese",
                         new EUR(1),
                         30,
-                        new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(49)),
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(49)),
                         new CheeseRules()
                 ).isEmpty()
         );
@@ -175,7 +230,7 @@ public class ProductTest {
                         "Cheese",
                         new EUR(1),
                         30,
-                        new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(50)),
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(50)),
                         new CheeseRules()
                 ).isPresent()
         );
@@ -189,7 +244,7 @@ public class ProductTest {
                         "Cheese",
                         new EUR(1),
                         30,
-                        new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(101)),
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(101)),
                         new CheeseRules()
                 ).isEmpty()
         );
@@ -199,7 +254,7 @@ public class ProductTest {
                         "Cheese",
                         new EUR(1),
                         30,
-                        new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(100)),
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(100)),
                         new CheeseRules()
                 ).isPresent()
         );
@@ -213,7 +268,7 @@ public class ProductTest {
                         "Cheese",
                         new EUR(1),
                         29,
-                        new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(75)),
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
                         new CheeseRules()
                 ).isEmpty()
         );
@@ -223,10 +278,47 @@ public class ProductTest {
                         "Cheese",
                         new EUR(1),
                         30,
-                        new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(75)),
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
                         new CheeseRules()
                 ).isPresent()
         );
+    }
+
+    @Test
+    @DisplayName("product does not age on creation day")
+    void noDailyUpdateOnCreationDay() {
+        var maybeProduct = Product.of(
+                "Cheese",
+                new EUR(1),
+                31,
+                new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
+                new CheeseRules()
+        );
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+        product.dailyUpdate();
+
+        assertEquals(31, product.getQuality());
+    }
+
+    @Test
+    @DisplayName("product does not age twice on the same day")
+    void onlyOneDailyUpdatePerDay() {
+        var maybeProduct = Product.of(
+                "Cheese",
+                new EUR(1),
+                31,
+                new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
+                new CheeseRules()
+        );
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
+        product.dailyUpdate();
+
+        assertEquals(30, product.getQuality());
     }
 
     @Test
@@ -236,7 +328,7 @@ public class ProductTest {
                 "Cheese",
                 new EUR(1),
                 30,
-                new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(75)),
+                new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
                 new CheeseRules()
         );
 
@@ -253,13 +345,13 @@ public class ProductTest {
                 "Cheese",
                 new EUR(1),
                 31,
-                new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(75)),
+                new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
                 new CheeseRules()
         );
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals(30, product.getQuality());
     }
@@ -271,13 +363,13 @@ public class ProductTest {
                 "Cheese",
                 new EUR(1),
                 30,
-                new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(75)),
+                new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
                 new CheeseRules()
         );
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertTrue(product.toRemove());
     }
@@ -289,7 +381,7 @@ public class ProductTest {
                 "Cheese",
                 new EUR(1),
                 30,
-                new ExpirationDate.ExpiresAt(LocalDate.now().plusDays(75)),
+                new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)),
                 new CheeseRules()
         );
 
@@ -307,7 +399,7 @@ public class ProductTest {
                         "Wine",
                         new EUR(1),
                         30,
-                        new ExpirationDate.ExpiresAt(LocalDate.now()),
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock)),
                         new WineRules()
                 ).isEmpty()
         );
@@ -361,12 +453,12 @@ public class ProductTest {
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
 
-        IntStream.range(1, 10).forEach(_ -> {
-            product.dailyUpdate();
+        IntStream.range(1, 10).forEach(dayOffset -> {
+            performDailyUpdateAndAdvanceClockBy(product, dayOffset);
             assertEquals(0, product.getQuality());
         });
 
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 11);
         assertEquals(1, product.getQuality());
     }
 
@@ -395,8 +487,8 @@ public class ProductTest {
                         "Bricks",
                         new EUR(1),
                         10,
-                        new ExpirationDate.ExpiresAt(LocalDate.now()),
-                        new BricksRules(LocalDate.now())
+                        new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock)),
+                        new BricksRules(LocalDate.now(SimulationContext.clock))
                 ).isEmpty()
         );
 
@@ -406,7 +498,7 @@ public class ProductTest {
                         new EUR(1),
                         10,
                         ExpirationDate.DoesNotExpire.instance(),
-                        new BricksRules(LocalDate.now())
+                        new BricksRules(LocalDate.now(SimulationContext.clock))
                 ).isPresent()
         );
     }
@@ -420,7 +512,7 @@ public class ProductTest {
                         new EUR(1),
                         9002,
                         ExpirationDate.DoesNotExpire.instance(),
-                        new BricksRules(LocalDate.now())
+                        new BricksRules(LocalDate.now(SimulationContext.clock))
                 ).isEmpty()
         );
 
@@ -430,7 +522,7 @@ public class ProductTest {
                         new EUR(1),
                         9001,
                         ExpirationDate.DoesNotExpire.instance(),
-                        new BricksRules(LocalDate.now())
+                        new BricksRules(LocalDate.now(SimulationContext.clock))
                 ).isPresent()
         );
     }
@@ -443,12 +535,12 @@ public class ProductTest {
                 new EUR(1),
                 10,
                 ExpirationDate.DoesNotExpire.instance(),
-                new BricksRules(LocalDate.now().plusDays(1))
+                new BricksRules(LocalDate.now(SimulationContext.clock).plusDays(1))
         );
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals(10, product.getQuality());
     }
@@ -461,12 +553,12 @@ public class ProductTest {
                 new EUR(1),
                 10,
                 ExpirationDate.DoesNotExpire.instance(),
-                new BricksRules(LocalDate.now().minusMonths(1))
+                new BricksRules(LocalDate.now(SimulationContext.clock).minusMonths(1).plusDays(1))
         );
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals(10, product.getQuality());
     }
@@ -479,12 +571,12 @@ public class ProductTest {
                 new EUR(1),
                 10,
                 ExpirationDate.DoesNotExpire.instance(),
-                new BricksRules(LocalDate.now().minusMonths(1).minusDays(1))
+                new BricksRules(LocalDate.now(SimulationContext.clock).minusMonths(1).minusDays(1))
         );
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals(11, product.getQuality());
     }
@@ -497,12 +589,12 @@ public class ProductTest {
                 new EUR(1),
                 10,
                 ExpirationDate.DoesNotExpire.instance(),
-                new BricksRules(LocalDate.now().minusYears(1))
+                new BricksRules(LocalDate.now(SimulationContext.clock).minusYears(1).plusDays(1))
         );
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals(11, product.getQuality());
     }
@@ -515,13 +607,58 @@ public class ProductTest {
                 new EUR(1),
                 10,
                 ExpirationDate.DoesNotExpire.instance(),
-                new BricksRules(LocalDate.now().minusYears(1).minusDays(1))
+                new BricksRules(LocalDate.now(SimulationContext.clock).minusYears(1))
         );
 
         assertTrue(maybeProduct.isPresent());
         var product = maybeProduct.get();
-        product.dailyUpdate();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
 
         assertEquals(20, product.getQuality());
+    }
+
+    @Test
+    @DisplayName("product that doesn't age well decreases in quality over time")
+    void degradingProductQualityReducesOnDailyUpdate() {
+        var maybeProduct = Product.of(
+                "DegradingProduct",
+                new EUR(1),
+                10,
+                ExpirationDate.DoesNotExpire.instance(),
+                new ModularRules(
+                        new SimpleRule<>(_ -> false),
+                        new SimpleRule<>(p -> p.basePrice),
+                        p ->  p.setQuality(p.getQuality()-1)
+                )
+        );
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+        performDailyUpdateAndAdvanceClockBy(product, 1);
+
+        assertEquals(9, product.getQuality());
+    }
+
+    @Test
+    @DisplayName("resetting the quality to the same value does not notify the observers")
+    void settingProductQualityToSameValue() {
+        var maybeProduct = Product.of(
+                "DegradingProduct",
+                new EUR(1),
+                10,
+                ExpirationDate.DoesNotExpire.instance(),
+                new GeneralRules()
+        );
+
+        assertTrue(maybeProduct.isPresent());
+        var product = maybeProduct.get();
+        product.setQuality(product.getQuality());
+
+        assertEquals(10, product.getQuality());
+    }
+
+    private void performDailyUpdateAndAdvanceClockBy(Product product, int days) {
+        SimulationContext.setClock(LocalDate.now(SimulationContext.clock).plusDays(days));
+        product.dailyUpdate();
     }
 }
