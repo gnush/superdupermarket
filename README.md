@@ -22,12 +22,12 @@ to start a simulation.
 
 ### Parameters
 
-| Parameter  | Description                                                                                    |
-|------------|------------------------------------------------------------------------------------------------|
-| SIMULATION | The entry point to run                                                                         |
-| DAYS       | Number of days to simulate.                                                                    |
-| DATASOURCE | Use 'static', 'csv', 'sqlite' as source for the inventory. Default: static                     |
-| FILE       | The csv file or sqlite database to use. Only in combination with 'csv' or 'sqlite' DATASOURCE. |
+| Parameter  | Description                                                                                   |
+|------------|-----------------------------------------------------------------------------------------------|
+| SIMULATION | The entry point to run                                                                        |
+| DAYS       | Number of days to simulate                                                                    |
+| DATASOURCE | Use 'static', 'csv', 'sqlite' as source for the inventory. Default: static                    |
+| FILE       | The csv file or sqlite database to use. Only in combination with 'csv' or 'sqlite' DATASOURCE |
 
 | SIMULATION                                | Description                                                                                                 |
 |-------------------------------------------|-------------------------------------------------------------------------------------------------------------|
