@@ -12,14 +12,14 @@ public class ProductQualityObserver implements Observer<Product, ProductChange> 
             case ProductChange.QualityIncrease inc -> {
                 msg.append("' increased by ");
                 msg.append(inc.change());
+                System.out.println(msg);
             }
             case ProductChange.QualityDecrease dec -> {
                 msg.append("' decreased by ");
                 msg.append(dec.change());
+                System.out.println(msg);
             }
             case ProductChange.DailyUpdate _ -> { }
         }
-
-        System.out.println(msg);
     }
 }
