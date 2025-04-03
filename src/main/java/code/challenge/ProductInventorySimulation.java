@@ -1,16 +1,19 @@
 package code.challenge;
 
-import code.challenge.datasource.StaticData;
 import code.challenge.product.Product;
+import code.challenge.util.ArgumentParser;
 
 import java.time.LocalDate;
 
 public class ProductInventorySimulation {
     public static void main(String[] args) {
-        LocalDate simulationStartDate = LocalDate.now();
-        int simulationDays = 10;
+        final var arguments = ArgumentParser.parseArguments(args);
+        final int simulationDays = arguments._1();
+        final var datasource = arguments._2();
 
-        var products = StaticData.getInstance().getProducts();
+        LocalDate simulationStartDate = LocalDate.now();
+
+        var products = datasource.getProducts();
         System.out.println("Product inventory on " + simulationStartDate);
         products.forEach(System.out::println);
 
