@@ -14,14 +14,16 @@ Manage the inventory of a market. Keep track of items that should be removed bas
 
 ### Execute manually
 
-1. Run `mvn package` to package a jar with maven.
-2. Run
+Run `mvn package` to package a jar with maven, then run
 ```
-java -cp target/SuperDuperMarket-1.0.jar:/path/to/picocli.jar code.challenge.SIMULATION [-n DAYS] [-s DATASOURCE] [-f FILE]
+java -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.SIMULATION [-n DAYS] [-s DATASOURCE] [-f FILE]
 ```
 to start a simulation.
+Include the `picocli.jar` from your local maven repository, usually found under `$HOME/.m2`.
 
 ### Parameters
+
+Use the `--help` to print the parameter overview on your command line.
 
 | Parameter  | Description                                                                                |
 |------------|--------------------------------------------------------------------------------------------|
@@ -35,7 +37,6 @@ to start a simulation.
 | ProductInventorySimulation                | Prints the status of the inventory on each day                                                              |
 | ProductInventoryQualityObserverSimulation | Notifies about the daily quality changes of the inventory                                                   |
 | ProductInventoryObserverSimulation        | Notifies about the daily quality changes and automatically removes insufficient products from the inventory |
-
 
 ### Execute with maven
 
