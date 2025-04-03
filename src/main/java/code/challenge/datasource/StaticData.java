@@ -1,8 +1,8 @@
-package code.challenge.datasource.deprecated;
+package code.challenge.datasource;
 
 import code.challenge.currency.EUR;
 import code.challenge.currency.USD;
-import code.challenge.product.deprecated.*;
+import code.challenge.product.*;
 
 import java.time.LocalDate;
 import java.util.List;

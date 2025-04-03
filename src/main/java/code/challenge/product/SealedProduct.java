@@ -1,4 +1,4 @@
-package code.challenge.product.deprecated;
+package code.challenge.product;
 
 import code.challenge.currency.Currency;
 
@@ -105,9 +105,9 @@ public abstract sealed class SealedProduct permits SealedProduct.Lasting, Sealed
             quality--;
         }
 
-        public static Optional<code.challenge.product.deprecated.Cheese> of(String label, Currency basePrice, int quality, LocalDate expirationDate) {
+        public static Optional<code.challenge.product.Cheese> of(String label, Currency basePrice, int quality, LocalDate expirationDate) {
             try {
-                return Optional.of(new code.challenge.product.deprecated.Cheese(label, basePrice, quality, expirationDate));
+                return Optional.of(new code.challenge.product.Cheese(label, basePrice, quality, expirationDate));
             } catch (IllegalArgumentException e) {
                 System.err.printf("Cheese %s is not suitable, %s%n", label, e.getMessage());
                 return Optional.empty();
@@ -149,9 +149,9 @@ public abstract sealed class SealedProduct permits SealedProduct.Lasting, Sealed
             }
         }
 
-        public static Optional<code.challenge.product.deprecated.Wine> of(String label, Currency basePrice, int quality) {
+        public static Optional<code.challenge.product.Wine> of(String label, Currency basePrice, int quality) {
             try {
-                return Optional.of(new code.challenge.product.deprecated.Wine(label, basePrice, quality));
+                return Optional.of(new code.challenge.product.Wine(label, basePrice, quality));
             } catch (IllegalArgumentException e) {
                 System.err.printf("Wine %s is not suitable, %s%n", label, e.getMessage());
                 return Optional.empty();

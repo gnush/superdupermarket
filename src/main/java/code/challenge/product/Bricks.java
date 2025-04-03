@@ -1,4 +1,4 @@
-package code.challenge.product.deprecated;
+package code.challenge.product;
 
 import code.challenge.SimulationContext;
 import code.challenge.currency.Currency;

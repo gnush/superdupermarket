@@ -1,9 +1,9 @@
-package code.challenge.product.parse.deprecated;
+package code.challenge.product.parse;
 
 import code.challenge.currency.Currency;
 import code.challenge.currency.EUR;
 import code.challenge.currency.USD;
-import code.challenge.product.deprecated.*;
+import code.challenge.product.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

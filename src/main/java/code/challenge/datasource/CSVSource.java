@@ -1,8 +1,8 @@
-package code.challenge.datasource.deprecated;
+package code.challenge.datasource;
 
 import code.challenge.util.CSVReader;
-import code.challenge.product.deprecated.NullableExpirationProduct;
-import code.challenge.product.parse.deprecated.Parse;
+import code.challenge.product.NullableExpirationProduct;
+import code.challenge.product.parse.Parse;
 
 import java.util.*;
 import java.util.stream.Stream;

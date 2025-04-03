@@ -1,7 +1,7 @@
 package code.challenge;
 
-import code.challenge.datasource.deprecated.StaticData;
-import code.challenge.product.deprecated.NullableExpirationProduct;
+import code.challenge.datasource.StaticData;
+import code.challenge.product.NullableExpirationProduct;
 
 import java.time.LocalDate;
 
