@@ -10,20 +10,27 @@ Manage the inventory of a market. Keep track of items that should be removed bas
 
 Java >= 23
 
-## How to run
+## Usage
 
 Run `mvn package` to package a jar with maven.
 
 Run 
 ```
-java -cp target/SuperDuperMarket-1.0.jar code.challenge.SIMULATION_ENTRY [DATASOURCE [FILE]]
+java -cp target/SuperDuperMarket-1.0.jar code.challenge.SIMULATION DAYS [DATASOURCE [FILE]]
 ```
 to start a simulation.
 
-| SIMULATION_ENTRY                         | Objective                                                                                                   |
-| ---------------------------------------- |-------------------------------------------------------------------------------------------------------------|
-|ProductInventorySimulation                | Prints the status of the inventory on each day                                                              |
-|ProductInventoryQualityObserverSimulation | Notifies about the daily quality changes of the inventory                                                   |
-|ProductInventoryObserverSimulation        | Notifies about the daily quality changes and automatically removes insufficient products from the inventory |
+### Parameters
 
-TODO: add optional parameters explanation
+| Parameter  | Description                                                                                    |
+|------------|------------------------------------------------------------------------------------------------|
+| SIMULATION | The entry point to run                                                                         |
+| DAYS       | Number of days to simulate.                                                                    |
+| DATASOURCE | Use 'static', 'csv', 'sqlite' as source for the inventory. Default: static                     |
+| FILE       | The csv file or sqlite database to use. Only in combination with 'csv' or 'sqlite' DATASOURCE. |
+
+| SIMULATION                                | Description                                                                                                 |
+|-------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| ProductInventorySimulation                | Prints the status of the inventory on each day                                                              |
+| ProductInventoryQualityObserverSimulation | Notifies about the daily quality changes of the inventory                                                   |
+| ProductInventoryObserverSimulation        | Notifies about the daily quality changes and automatically removes insufficient products from the inventory |
