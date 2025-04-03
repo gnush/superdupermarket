@@ -2,7 +2,7 @@ name: Jar
 
 on:
   workflow_run:
-    workflows: [ "test" ]
+    workflows: [ "tests" ]
     branches: [ "master" ]
     types:
       - completed
