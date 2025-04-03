@@ -5,7 +5,7 @@ import code.challenge.product.NullableExpirationProduct;
 
 import java.time.LocalDate;
 
-public class DeprecatedProductInventorySimulation {
+public class ProductInventorySimulation {
 
     public static void main(String[] args) {
         var products = StaticData.getInstance().getProducts();
