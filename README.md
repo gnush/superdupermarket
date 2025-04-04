@@ -65,7 +65,7 @@ to start a simulation.
 2. Number of additional arguments (If products should be removed based on more than the generic product properties)
 3. Additional arguments (One cell for each additional argument)
 4. Product label
-5. Currency Identifiert (Currently only EUR and USD are supported)
+5. Currency Identifier (Currently EUR and USD are supported)
 6. Currency amount
 7. Product quality
 8. Expiration date in YYYY-MM-DD format (may be omitted if product does not expire)
