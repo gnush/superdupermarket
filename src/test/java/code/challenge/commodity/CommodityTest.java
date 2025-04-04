@@ -1,9 +1,9 @@
-package code.challenge.product;
+package code.challenge.commodity;
 
 import code.challenge.SimulationContext;
 import code.challenge.currency.EUR;
-import code.challenge.product.rule.*;
-import code.challenge.product.rule.modular.SimpleRule;
+import code.challenge.commodity.rule.*;
+import code.challenge.commodity.rule.modular.SimpleRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,25 +15,25 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static code.challenge.Assertions.assertCloseTo;
-public class ProductTest {
-    static Supplier<Optional<Product>> nonExpirableProduct = () ->
-            Product.of(
-                    "Product",
+public class CommodityTest {
+    static Supplier<Optional<Commodity>> nonExpirableCommodity = () ->
+            Commodity.of(
+                    "Commodity",
                     new EUR(10),
                     42,
                     new GeneralRules()
             );
-    static Supplier<Optional<Product>> expiredProduct = () ->
-            Product.of(
-                    "Product",
+    static Supplier<Optional<Commodity>> expiredCommodity = () ->
+            Commodity.of(
+                    "Commodity",
                     new EUR(10),
                     42,
                     new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(1)),
                     new GeneralRules()
             );
-    static Function<Integer, Optional<Product>> expiresIn = expiresIn ->
-            Product.of(
-                    "Product",
+    static Function<Integer, Optional<Commodity>> expiresIn = expiresIn ->
+            Commodity.of(
+                    "Commodity",
                     new EUR(10),
                     42,
                     new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(expiresIn)),
@@ -41,168 +41,168 @@ public class ProductTest {
             );
 
     @Test
-    @DisplayName("create non expirable product using general rule set")
-    void generalNonExpirableProductCreation() {
-        var maybeProduct = nonExpirableProduct.get();
+    @DisplayName("create non expirable commodity using general rule set")
+    void generalNonExpirableCommodityCreation() {
+        var maybeCommodity = nonExpirableCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertEquals("Product", product.label);
-        assertEquals(new EUR(10), product.basePrice);
-        assertEquals(42, product.getQuality());
-        assertEquals(ExpirationDate.DoesNotExpire.instance(), product.expirationDate);
+        assertEquals("Commodity", commodity.label);
+        assertEquals(new EUR(10), commodity.basePrice);
+        assertEquals(42, commodity.getQuality());
+        assertEquals(ExpirationDate.DoesNotExpire.instance(), commodity.expirationDate);
     }
 
     @Test
-    @DisplayName("create expirable product using general rule set")
-    void generalExpirableProductCreation() {
-        var maybeProduct = expiredProduct.get();
+    @DisplayName("create expirable commodity using general rule set")
+    void generalExpirableCommodityCreation() {
+        var maybeCommodity = expiredCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertEquals("Product", product.label);
-        assertEquals(new EUR(10), product.basePrice);
-        assertEquals(42, product.getQuality());
-        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(1)), product.expirationDate);
+        assertEquals("Commodity", commodity.label);
+        assertEquals(new EUR(10), commodity.basePrice);
+        assertEquals(42, commodity.getQuality());
+        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(1)), commodity.expirationDate);
     }
 
     @Test
-    @DisplayName("non-expirable product toString correct")
-    void generalNonExpirableProductToString() {
-        var maybeProduct = nonExpirableProduct.get();
+    @DisplayName("non-expirable commodity toString correct")
+    void generalNonExpirableCommodityToString() {
+        var maybeCommodity = nonExpirableCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
         assertEquals(
                 String.format(
                         "%s: basePrice='%s' quality=%s expiresOn=%s",
-                        product.label, product.basePrice, product.getQuality(), product.expirationDate
+                        commodity.label, commodity.basePrice, commodity.getQuality(), commodity.expirationDate
                 ),
-                product.toString());
+                commodity.toString());
     }
 
     @Test
-    @DisplayName("non-expirable product overview correct")
-    void generalNonExpirableProductOverview() {
-        var maybeProduct = nonExpirableProduct.get();
+    @DisplayName("non-expirable commodity overview correct")
+    void generalNonExpirableCommodityOverview() {
+        var maybeCommodity = nonExpirableCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
         assertEquals(
                 String.format(
                         "%s: price='%s' quality=%s remove=%s",
-                        product.label, product.dailyPrice(), product.getQuality(), product.toRemove()),
-                product.overview());
+                        commodity.label, commodity.dailyPrice(), commodity.getQuality(), commodity.toRemove()),
+                commodity.overview());
     }
 
     @Test
-    @DisplayName("non-expirable product pretty correct")
-    void generalNonExpirableProductpretty() {
-        var maybeProduct = nonExpirableProduct.get();
+    @DisplayName("non-expirable commodity pretty correct")
+    void generalNonExpirableCommodityPretty() {
+        var maybeCommodity = nonExpirableCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
         assertEquals(
-                String.format("%s (%s)\n%s", product.label, product.dailyPrice(), product.expirationDate),
-                product.pretty()
+                String.format("%s (%s)\n%s", commodity.label, commodity.dailyPrice(), commodity.expirationDate),
+                commodity.pretty()
         );
     }
 
     @Test
-    @DisplayName("non-expirable product using general rule set should not be removed")
-    void generalNonExpirableProductShouldNotBeRemoved(){
-        var maybeProduct = nonExpirableProduct.get();
+    @DisplayName("non-expirable commodity using general rule set should not be removed")
+    void generalNonExpirableCommodityShouldNotBeRemoved(){
+        var maybeCommodity = nonExpirableCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertFalse(product.toRemove());
+        assertFalse(commodity.toRemove());
     }
 
     @Test
-    @DisplayName("non expirable product using general rule set does not change on dailyUpdate")
-    void generalNonExpirableProductDoesNotChange() {
-        var maybeProduct = nonExpirableProduct.get();
+    @DisplayName("non expirable commodity using general rule set does not change on dailyUpdate")
+    void generalNonExpirableCommodityDoesNotChange() {
+        var maybeCommodity = nonExpirableCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals("Product", product.label);
-        assertEquals(new EUR(10), product.basePrice);
-        assertEquals(42, product.getQuality());
-        assertEquals(ExpirationDate.DoesNotExpire.instance(), product.expirationDate);
+        assertEquals("Commodity", commodity.label);
+        assertEquals(new EUR(10), commodity.basePrice);
+        assertEquals(42, commodity.getQuality());
+        assertEquals(ExpirationDate.DoesNotExpire.instance(), commodity.expirationDate);
     }
 
     @Test
-    @DisplayName("expirable product using general rule set does not change on dailyUpdate")
-    void generalExpirableProductDoesNotChange() {
-        var maybeProduct = expiredProduct.get();
+    @DisplayName("expirable commodity using general rule set does not change on dailyUpdate")
+    void generalExpirableCommodityDoesNotChange() {
+        var maybeCommodity = expiredCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals("Product", product.label);
-        assertEquals(new EUR(10), product.basePrice);
-        assertEquals(42, product.getQuality());
-        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(2)), product.expirationDate);
+        assertEquals("Commodity", commodity.label);
+        assertEquals(new EUR(10), commodity.basePrice);
+        assertEquals(42, commodity.getQuality());
+        assertEquals(new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).minusDays(2)), commodity.expirationDate);
     }
 
     @Test
-    @DisplayName("daily price of non expirable product using general rule set is determined by quality")
-    void generalNonExpirableProductDailyPrice() {
-        var maybeProduct = nonExpirableProduct.get();
+    @DisplayName("daily price of non expirable commodity using general rule set is determined by quality")
+    void generalNonExpirableCommodityDailyPrice() {
+        var maybeCommodity = nonExpirableCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertCloseTo(new EUR(14.2), product.dailyPrice(), 0.00001);
+        assertCloseTo(new EUR(14.2), commodity.dailyPrice(), 0.00001);
     }
 
     @Test
-    @DisplayName("daily price of expirable product using general rule set is determined by quality")
-    void generalExpirableProductDailyPrice() {
-        var maybeProduct = expiredProduct.get();
+    @DisplayName("daily price of expirable commodity using general rule set is determined by quality")
+    void generalExpirableCommodityDailyPrice() {
+        var maybeCommodity = expiredCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertCloseTo(new EUR(14.2), product.dailyPrice(), 0.00001);
+        assertCloseTo(new EUR(14.2), commodity.dailyPrice(), 0.00001);
     }
 
     @Test
-    @DisplayName("expired product should be removed from the inventory")
-    void expiredProductShouldBeRemoved() {
-        var maybeProduct = expiredProduct.get();
+    @DisplayName("expired commodity should be removed from the inventory")
+    void expiredCommodityShouldBeRemoved() {
+        var maybeCommodity = expiredCommodity.get();
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertTrue(product.toRemove());
+        assertTrue(commodity.toRemove());
     }
 
     @Test
-    @DisplayName("non expired product should remain in the inventory")
-    void nonExpiredProductShouldRemain() {
-        var maybeProduct = expiresIn.apply(1);
+    @DisplayName("non expired commodity should remain in the inventory")
+    void nonExpiredCommodityShouldRemain() {
+        var maybeCommodity = expiresIn.apply(1);
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertFalse(product.toRemove());
+        assertFalse(commodity.toRemove());
     }
 
     @Test
     @DisplayName("cheese should expire at some point")
     void cheeseShouldExpire() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Cheese",
                         new EUR(1),
                         30,
@@ -216,7 +216,7 @@ public class ProductTest {
     @DisplayName("cheese should not expire for 50 days")
     void cheeseCreationFailsIfExpirationDateTooSoon() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Cheese",
                         new EUR(1),
                         30,
@@ -226,7 +226,7 @@ public class ProductTest {
         );
 
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Cheese",
                         new EUR(1),
                         30,
@@ -240,7 +240,7 @@ public class ProductTest {
     @DisplayName("cheese should expire before 100 days")
     void cheeseCreationFailsIfExpirationDateTooFarAway() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Cheese",
                         new EUR(1),
                         30,
@@ -250,7 +250,7 @@ public class ProductTest {
         );
 
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Cheese",
                         new EUR(1),
                         30,
@@ -264,7 +264,7 @@ public class ProductTest {
     @DisplayName("cheese should have at least a quality of 30")
     void cheeseCreationFailsIfQualityTooLow() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Cheese",
                         new EUR(1),
                         29,
@@ -274,7 +274,7 @@ public class ProductTest {
         );
 
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Cheese",
                         new EUR(1),
                         30,
@@ -285,9 +285,9 @@ public class ProductTest {
     }
 
     @Test
-    @DisplayName("product does not age on creation day")
+    @DisplayName("commodity does not age on creation day")
     void noDailyUpdateOnCreationDay() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Cheese",
                 new EUR(1),
                 31,
@@ -295,17 +295,17 @@ public class ProductTest {
                 new CheeseRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        product.dailyUpdate();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        commodity.dailyUpdate();
 
-        assertEquals(31, product.getQuality());
+        assertEquals(31, commodity.getQuality());
     }
 
     @Test
-    @DisplayName("product does not age twice on the same day")
+    @DisplayName("commodity does not age twice on the same day")
     void onlyOneDailyUpdatePerDay() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Cheese",
                 new EUR(1),
                 31,
@@ -313,18 +313,18 @@ public class ProductTest {
                 new CheeseRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
-        product.dailyUpdate();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
+        commodity.dailyUpdate();
 
-        assertEquals(30, product.getQuality());
+        assertEquals(30, commodity.getQuality());
     }
 
     @Test
     @DisplayName("daily price of cheese is determined by quality")
     void cheeseDailyPrice() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Cheese",
                 new EUR(1),
                 30,
@@ -332,16 +332,16 @@ public class ProductTest {
                 new CheeseRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertCloseTo(new EUR(4), product.dailyPrice(), 0.00001);
+        assertCloseTo(new EUR(4), commodity.dailyPrice(), 0.00001);
     }
 
     @Test
     @DisplayName("cheese degrades in quality over time")
     void cheeseDegradesOnDailyUpdate() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Cheese",
                 new EUR(1),
                 31,
@@ -349,17 +349,17 @@ public class ProductTest {
                 new CheeseRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals(30, product.getQuality());
+        assertEquals(30, commodity.getQuality());
     }
 
     @Test
     @DisplayName("cheese should be removed from the inventory if quality too low")
     void cheeseShouldBeRemoveOnLowQuality() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Cheese",
                 new EUR(1),
                 30,
@@ -367,17 +367,17 @@ public class ProductTest {
                 new CheeseRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertTrue(product.toRemove());
+        assertTrue(commodity.toRemove());
     }
 
     @Test
     @DisplayName("cheese should remain in the inventory if quality over threshold")
     void cheeseShouldRemainOnOkayQuality() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Cheese",
                 new EUR(1),
                 30,
@@ -385,17 +385,17 @@ public class ProductTest {
                 new CheeseRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertFalse(product.toRemove());
+        assertFalse(commodity.toRemove());
     }
 
     @Test
     @DisplayName("wine should not expire")
     void wineShouldNotExpire() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Wine",
                         new EUR(1),
                         30,
@@ -405,7 +405,7 @@ public class ProductTest {
         );
 
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Wine",
                         new EUR(1),
                         30,
@@ -419,7 +419,7 @@ public class ProductTest {
     @DisplayName("wine quality should be non negative")
     void wineQualityShouldBeNonNegative() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Wine",
                         new EUR(1),
                         -1,
@@ -429,7 +429,7 @@ public class ProductTest {
         );
 
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Wine",
                         new EUR(1),
                         0,
@@ -442,7 +442,7 @@ public class ProductTest {
     @Test
     @DisplayName("wine increases in quality after 10 days")
     void wineQualityIncreasesOverTime() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Wine",
                 new EUR(1),
                 0,
@@ -450,22 +450,22 @@ public class ProductTest {
                 new WineRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
         IntStream.range(1, 10).forEach(dayOffset -> {
-            performDailyUpdateAndAdvanceClockBy(product, dayOffset);
-            assertEquals(0, product.getQuality());
+            performDailyUpdateAndAdvanceClockBy(commodity, dayOffset);
+            assertEquals(0, commodity.getQuality());
         });
 
-        performDailyUpdateAndAdvanceClockBy(product, 11);
-        assertEquals(1, product.getQuality());
+        performDailyUpdateAndAdvanceClockBy(commodity, 11);
+        assertEquals(1, commodity.getQuality());
     }
 
     @Test
     @DisplayName("the daily price of wine is not determined by quality")
     void wineDailyPriceIsStatic() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Wine",
                 new EUR(1),
                 10,
@@ -473,17 +473,17 @@ public class ProductTest {
                 new WineRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
 
-        assertCloseTo(new EUR(1), product.dailyPrice(), 0.0001);
+        assertCloseTo(new EUR(1), commodity.dailyPrice(), 0.0001);
     }
 
     @Test
     @DisplayName("bricks should not expire")
     void bricksShouldNotExpire() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Bricks",
                         new EUR(1),
                         10,
@@ -493,7 +493,7 @@ public class ProductTest {
         );
 
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Bricks",
                         new EUR(1),
                         10,
@@ -507,7 +507,7 @@ public class ProductTest {
     @DisplayName("bricks quality should not exceed 9002")
     void bricksCreationFailsIfOverQualityThreshold() {
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Bricks",
                         new EUR(1),
                         9002,
@@ -517,7 +517,7 @@ public class ProductTest {
         );
 
         assertTrue(
-                Product.of(
+                Commodity.of(
                         "Bricks",
                         new EUR(1),
                         9001,
@@ -528,9 +528,9 @@ public class ProductTest {
     }
 
     @Test
-    @DisplayName("bricks quality remains unchanged if product is still produced")
+    @DisplayName("bricks quality remains unchanged if commodity is still produced")
     void bricksQualityRemainsIfStillProduced() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Bricks",
                 new EUR(1),
                 10,
@@ -538,17 +538,17 @@ public class ProductTest {
                 new BricksRules(LocalDate.now(SimulationContext.clock).plusDays(1))
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals(10, product.getQuality());
+        assertEquals(10, commodity.getQuality());
     }
 
     @Test
     @DisplayName("bricks quality remains unchanged if production stopped less than a month ago")
     void bricksQualityRemainsIfNotYetOneMonthAfterEndOfProduction() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Bricks",
                 new EUR(1),
                 10,
@@ -556,17 +556,17 @@ public class ProductTest {
                 new BricksRules(LocalDate.now(SimulationContext.clock).minusMonths(1).plusDays(1))
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals(10, product.getQuality());
+        assertEquals(10, commodity.getQuality());
     }
 
     @Test
     @DisplayName("bricks quality increases moderately if one month after production end")
     void bricksQualityIncreasesIfOneMonthOverEndOfProduction() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Bricks",
                 new EUR(1),
                 10,
@@ -574,17 +574,17 @@ public class ProductTest {
                 new BricksRules(LocalDate.now(SimulationContext.clock).minusMonths(1).minusDays(1))
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals(11, product.getQuality());
+        assertEquals(11, commodity.getQuality());
     }
 
     @Test
     @DisplayName("bricks quality increases moderately until one year after production end")
     void bricksQualityIncreasesIfAtOneYearOverEndOfProduction() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Bricks",
                 new EUR(1),
                 10,
@@ -592,17 +592,17 @@ public class ProductTest {
                 new BricksRules(LocalDate.now(SimulationContext.clock).minusYears(1).plusDays(1))
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals(11, product.getQuality());
+        assertEquals(11, commodity.getQuality());
     }
 
     @Test
     @DisplayName("bricks quality increases largely if one year after production end")
     void bricksQualityIncreasesIfOneYearOverEndOfProduction() {
-        var maybeProduct = Product.of(
+        var maybeCommodity = Commodity.of(
                 "Bricks",
                 new EUR(1),
                 10,
@@ -610,18 +610,18 @@ public class ProductTest {
                 new BricksRules(LocalDate.now(SimulationContext.clock).minusYears(1))
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals(20, product.getQuality());
+        assertEquals(20, commodity.getQuality());
     }
 
     @Test
-    @DisplayName("product that doesn't age well decreases in quality over time")
-    void degradingProductQualityReducesOnDailyUpdate() {
-        var maybeProduct = Product.of(
-                "DegradingProduct",
+    @DisplayName("commodity that doesn't age well decreases in quality over time")
+    void degradingCommodityQualityReducesOnDailyUpdate() {
+        var maybeCommodity = Commodity.of(
+                "DegradingCommodity",
                 new EUR(1),
                 10,
                 ExpirationDate.DoesNotExpire.instance(),
@@ -632,33 +632,33 @@ public class ProductTest {
                 )
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        performDailyUpdateAndAdvanceClockBy(product, 1);
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        performDailyUpdateAndAdvanceClockBy(commodity, 1);
 
-        assertEquals(9, product.getQuality());
+        assertEquals(9, commodity.getQuality());
     }
 
     @Test
     @DisplayName("resetting the quality to the same value does not notify the observers")
-    void settingProductQualityToSameValue() {
-        var maybeProduct = Product.of(
-                "DegradingProduct",
+    void settingCommodityQualityToSameValue() {
+        var maybeCommodity = Commodity.of(
+                "DegradingCommodity",
                 new EUR(1),
                 10,
                 ExpirationDate.DoesNotExpire.instance(),
                 new GeneralRules()
         );
 
-        assertTrue(maybeProduct.isPresent());
-        var product = maybeProduct.get();
-        product.setQuality(product.getQuality());
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+        commodity.setQuality(commodity.getQuality());
 
-        assertEquals(10, product.getQuality());
+        assertEquals(10, commodity.getQuality());
     }
 
-    private void performDailyUpdateAndAdvanceClockBy(Product product, int days) {
+    private void performDailyUpdateAndAdvanceClockBy(Commodity commodity, int days) {
         SimulationContext.setClock(LocalDate.now(SimulationContext.clock).plusDays(days));
-        product.dailyUpdate();
+        commodity.dailyUpdate();
     }
 }

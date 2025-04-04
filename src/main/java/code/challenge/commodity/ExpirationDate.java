@@ -1,4 +1,4 @@
-package code.challenge.product;
+package code.challenge.commodity;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

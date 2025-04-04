@@ -41,6 +41,6 @@ public class CSVReader {
     }
 
     public static @NotNull CSVReader defaultReader() {
-        return new CSVReader(Path.of("src","main","resources", "products.csv"), ";");
+        return new CSVReader(Path.of("src","main","resources", "commodities.csv"), ";");
     }
 }

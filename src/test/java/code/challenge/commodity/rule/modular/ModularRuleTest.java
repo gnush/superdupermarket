@@ -1,4 +1,4 @@
-package code.challenge.product.rule.modular;
+package code.challenge.commodity.rule.modular;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,9 @@
-package code.challenge.product.rule;
+package code.challenge.commodity.rule;
 
 import code.challenge.SimulationContext;
 import code.challenge.currency.Currency;
-import code.challenge.product.ExpirationDate;
-import code.challenge.product.Product;
+import code.challenge.commodity.ExpirationDate;
+import code.challenge.commodity.Commodity;
 import code.challenge.util.Tuple4;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,13 +18,13 @@ public class CheeseRules extends GeneralRules {
     private static final int EXPIRATION_DURATION_MAX = 100;
 
     @Override
-    public boolean toRemove(@NotNull Product p) {
-        return super.toRemove(p) || p.getQuality() < MIN_QUALITY;
+    public boolean toRemove(@NotNull Commodity c) {
+        return super.toRemove(c) || c.getQuality() < MIN_QUALITY;
     }
 
     @Override
-    public void dailyUpdate(@NotNull Product p) {
-        p.setQuality(p.getQuality()-1);
+    public void dailyUpdate(@NotNull Commodity c) {
+        c.setQuality(c.getQuality()-1);
     }
 
     @Override

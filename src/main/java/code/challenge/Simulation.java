@@ -9,7 +9,7 @@ import picocli.CommandLine;
 import java.nio.file.Path;
 import java.time.LocalDate;
 
-@CommandLine.Command(name = "Product Inventory Simulation", version = "1.0", mixinStandardHelpOptions = true)
+@CommandLine.Command(name = "Commodity Inventory Simulation", version = "1.0", mixinStandardHelpOptions = true)
 public class Simulation implements Runnable {
     private final static String DEFAULT_VALUE = "@|underline ${DEFAULT-VALUE}|@";
     private final static String DATE_FORMAT = "@|underline YYYY-MM-DD|@";
@@ -19,8 +19,8 @@ public class Simulation implements Runnable {
             description = "Number of days to simulate (default: "+DEFAULT_VALUE+")")
     int simulationDays = ArgumentParser.DEFAULT_SIMULATION_DAYS;
 
-    @CommandLine.Option(names = { "-c", "--clean" }, description = "Remove insufficient products at the end of each simulation day")
-    boolean removeProductsRequested;
+    @CommandLine.Option(names = { "-c", "--clean" }, description = "Remove insufficient commodities at the end of each simulation day")
+    boolean removeCommoditiesRequested;
 
     @CommandLine.Option(names = { "-d", "--startDay" }, paramLabel = "DATE",
                         description = "Date to start the simulation on. @|underline DATE|@ format is "+DATE_FORMAT+" (default: @|underline today|@)")
@@ -47,22 +47,22 @@ public class Simulation implements Runnable {
         SimulationContext.setClock(simulationStartDate);
 
         switch (simulation.toLowerCase()) {
-            case "quality" -> ProductInventoryQualityObserverSimulation.runSimulation(
+            case "quality" -> CommodityInventoryQualityObserverSimulation.runSimulation(
                     source,
                     simulationStartDate,
                     simulationDays,
-                    removeProductsRequested
+                    removeCommoditiesRequested
             );
-            case "autoremove" -> ProductInventoryObserverSimulation.runSimulation(
+            case "autoremove" -> CommodityInventoryObserverSimulation.runSimulation(
                     source,
                     simulationStartDate,
                     simulationDays
             );
-            default -> ProductInventorySimulation.runSimulation(
+            default -> CommodityInventorySimulation.runSimulation(
                     source,
                     simulationStartDate,
                     simulationDays,
-                    removeProductsRequested
+                    removeCommoditiesRequested
             );
         }
     }

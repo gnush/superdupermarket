@@ -1,7 +1,7 @@
 package code.challenge.datasource;
 
-import code.challenge.product.Product;
-import code.challenge.product.parse.Parse;
+import code.challenge.commodity.Commodity;
+import code.challenge.commodity.parse.Parse;
 import code.challenge.util.CSVReader;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class CSVSource implements DataSource {
         this.csv = csv;
     }
 
-    private @NotNull Optional<Product> parseCSVRow(@NotNull List<String> cells) {
+    private @NotNull Optional<Commodity> parseCSVRow(@NotNull List<String> cells) {
         if (cells.size() <= 2)
             return Optional.empty();
 
@@ -24,7 +24,7 @@ public class CSVSource implements DataSource {
             final int numConfigCells = 2;
             int numRuleArgs = Integer.parseInt(cells.get(1));
 
-            return Parse.product(
+            return Parse.commodity(
                     cells.getFirst(),
                     cells.subList(numConfigCells, numConfigCells+numRuleArgs),
                     cells.subList(numConfigCells+numRuleArgs, cells.size())
@@ -36,7 +36,7 @@ public class CSVSource implements DataSource {
     }
 
     @Override
-    public @NotNull List<Product> getProducts() {
+    public @NotNull List<Commodity> getCommodities() {
         csv.readCSVContent();
         var csvContent = csv.getCSVRows();
 

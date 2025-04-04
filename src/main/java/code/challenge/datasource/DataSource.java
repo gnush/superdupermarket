@@ -1,10 +1,10 @@
 package code.challenge.datasource;
 
-import code.challenge.product.Product;
+import code.challenge.commodity.Commodity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public interface DataSource {
-    @NotNull List<Product> getProducts();
+    @NotNull List<Commodity> getCommodities();
 }

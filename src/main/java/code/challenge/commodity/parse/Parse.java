@@ -1,11 +1,11 @@
-package code.challenge.product.parse;
+package code.challenge.commodity.parse;
 
 import code.challenge.currency.Currency;
 import code.challenge.currency.EUR;
 import code.challenge.currency.USD;
-import code.challenge.product.ExpirationDate;
-import code.challenge.product.Product;
-import code.challenge.product.ProductLookup;
+import code.challenge.commodity.ExpirationDate;
+import code.challenge.commodity.Commodity;
+import code.challenge.commodity.CommodityLookup;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -15,17 +15,17 @@ import java.util.Optional;
 
 public final class Parse {
     @NotNull
-    public static Optional<Product> product(@NotNull String type, @NotNull List<String> ruleArgs, @NotNull List<String> productArgs) {
+    public static Optional<Commodity> commodity(@NotNull String type, @NotNull List<String> ruleArgs, @NotNull List<String> commodityArgs) {
         try {
-            ExpirationDate expirationDate = productArgs.size() > 4
-                    ? new ExpirationDate.ExpiresAt(LocalDate.parse(productArgs.get(4)))
+            ExpirationDate expirationDate = commodityArgs.size() > 4
+                    ? new ExpirationDate.ExpiresAt(LocalDate.parse(commodityArgs.get(4)))
                     : ExpirationDate.DoesNotExpire.instance();
-            return Product.of(
-                    productArgs.getFirst(),
-                    parseCurrency(productArgs.get(1), productArgs.get(2)),
-                    Integer.parseInt(productArgs.get(3)),
+            return Commodity.of(
+                    commodityArgs.getFirst(),
+                    parseCurrency(commodityArgs.get(1), commodityArgs.get(2)),
+                    Integer.parseInt(commodityArgs.get(3)),
                     expirationDate,
-                    ProductLookup.getProductRules(type, ruleArgs).get()
+                    CommodityLookup.getCommodityRules(type, ruleArgs).get()
             );
         } catch (Exception _) {
             return Optional.empty();

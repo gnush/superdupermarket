@@ -4,7 +4,14 @@
 
 # SuperDuperMarket
 
-Manage the inventory of a market. Keep track of items that should be removed based on the expiration date or the quality.
+Simulate the inventory management of a store.
+
+Keep track of commodities that should be removed based on the expiration date or the quality.
+Commodities may change in quality over time. Commodity quality change is based on rules.
+There is a generic rule set predefined for unrecognized commodities, as well as specialised rule sets for cheese, wine and sets of interlocking building bricks.
+Additional rule sets can be created by adding new classes or can be dynamically constructed in a modular way.
+
+Execute a simulation spanning multiple days.
 
 ## Requires
 
@@ -40,17 +47,17 @@ Use `--help` to print the parameter overview on your command line.
 | -e, --exec     | The simulation to execute. Check table below for possible values. <br>Default: inventory                              |
 | -n, --days     | Number of days to simulate <br>Default: 10                                                                            |
 | -d, --startDay | The first day of the simulation. <br> Format: YYYY-MM-DD                                                              |
-| -c, --clean    | Insufficient products will be removed from the inventory at the end of each simulation day                            |
+| -c, --clean    | Insufficient Commodities will be removed from the inventory at the end of each simulation day                         |
 | -s, --source   | Use the standard 'static', 'csv' or 'sqlite' source for the inventory. <br>Ignored when -f is set <br>Default: static |
 | -f, --file     | The csv file or sqlite database to use. <br>-s is ignored if -f is set                                                |
 | --delimiter    | The cell delimiter of the csv file. <br>Use when providing a .csv file with -f                                        |
 | -h, --help     | Print a help message                                                                                                  |
 
-| SIM        | Description                                                                                                 |
-|------------|-------------------------------------------------------------------------------------------------------------|
-| inventory  | Prints the status of the inventory on each day                                                              |
-| quality    | Notifies about the daily quality changes of the inventory                                                   |
-| autoremove | Notifies about the daily quality changes and automatically removes insufficient products from the inventory |
+| SIM        | Description                                                                                                    |
+|------------|----------------------------------------------------------------------------------------------------------------|
+| inventory  | Prints the status of the inventory on each day                                                                 |
+| quality    | Notifies about the daily quality changes of the inventory                                                      |
+| autoremove | Notifies about the daily quality changes and automatically removes insufficient Commodities from the inventory |
 
 ### Execute with maven
 
@@ -69,13 +76,13 @@ mvn exec:java -Dexec.mainClass="code.challenge.Simulation" -Dexec.args="[OPTIONS
 ```
 to start a simulation.
 
-## Product CSV Format
+## Commodity CSV Format
 
-1. Product Category
-2. Number of additional arguments (If products should be removed based on more than the generic product properties)
+1. Commodity Category
+2. Number of additional arguments (Can be used if commodities should be removed based on more than the generic rules)
 3. Additional arguments (One cell for each additional argument)
-4. Product label
+4. Commodity label
 5. Currency Identifier (Currently EUR and USD are supported)
 6. Currency amount
-7. Product quality
-8. Expiration date in YYYY-MM-DD format (may be omitted if product does not expire)
+7. Commodity quality
+8. Expiration date in YYYY-MM-DD format (can be omitted if commodity does not expire)

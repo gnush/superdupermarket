@@ -1,8 +1,8 @@
-package code.challenge.product.rule;
+package code.challenge.commodity.rule;
 
 import code.challenge.currency.Currency;
-import code.challenge.product.ExpirationDate;
-import code.challenge.product.Product;
+import code.challenge.commodity.ExpirationDate;
+import code.challenge.commodity.Commodity;
 import code.challenge.util.Tuple4;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface ProductRules {
-    boolean toRemove(@NotNull Product p);
+public interface CommodityRules {
+    boolean toRemove(@NotNull Commodity c);
 
-    @NotNull Currency dailyPrice(@NotNull Product p);
+    @NotNull Currency dailyPrice(@NotNull Commodity c);
 
-    void dailyUpdate(@NotNull Product p);
+    void dailyUpdate(@NotNull Commodity c);
 
     /**
      * @return A set of rules to check if object creation should be allowed

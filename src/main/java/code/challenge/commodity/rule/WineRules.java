@@ -1,8 +1,8 @@
-package code.challenge.product.rule;
+package code.challenge.commodity.rule;
 
 import code.challenge.currency.Currency;
-import code.challenge.product.ExpirationDate;
-import code.challenge.product.Product;
+import code.challenge.commodity.ExpirationDate;
+import code.challenge.commodity.Commodity;
 import code.challenge.util.Tuple4;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,28 +10,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class WineRules implements ProductRules {
+public class WineRules implements CommodityRules {
     private static final int MIN_QUALITY = 0;
     private static final int MAX_AGING_QUALITY = 50;
     private int agingInterval = 10;
 
     @Override
-    public boolean toRemove(@NotNull Product p) {
+    public boolean toRemove(@NotNull Commodity c) {
         return false;
     }
 
     @Override
-    public @NotNull Currency dailyPrice(@NotNull Product p) {
-        return p.basePrice;
+    public @NotNull Currency dailyPrice(@NotNull Commodity c) {
+        return c.basePrice;
     }
 
     @Override
-    public void dailyUpdate(@NotNull Product p) {
-        if (p.getQuality() < MAX_AGING_QUALITY)
+    public void dailyUpdate(@NotNull Commodity c) {
+        if (c.getQuality() < MAX_AGING_QUALITY)
             agingInterval--;
 
         if (agingInterval == 0) {
-            p.setQuality(Math.min(p.getQuality()+1, MAX_AGING_QUALITY));
+            c.setQuality(Math.min(c.getQuality()+1, MAX_AGING_QUALITY));
             agingInterval = 10;
         }
     }

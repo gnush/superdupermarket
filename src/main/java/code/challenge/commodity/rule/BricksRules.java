@@ -1,9 +1,9 @@
-package code.challenge.product.rule;
+package code.challenge.commodity.rule;
 
 import code.challenge.SimulationContext;
 import code.challenge.currency.Currency;
-import code.challenge.product.ExpirationDate;
-import code.challenge.product.Product;
+import code.challenge.commodity.ExpirationDate;
+import code.challenge.commodity.Commodity;
 import code.challenge.util.Tuple4;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,17 +21,17 @@ public class BricksRules extends GeneralRules {
     }
 
     @Override
-    public boolean toRemove(@NotNull Product p) {
+    public boolean toRemove(@NotNull Commodity c) {
         return false;
     }
 
     @Override
-    public void dailyUpdate(@NotNull Product p) {
+    public void dailyUpdate(@NotNull Commodity c) {
         LocalDate today = LocalDate.now(SimulationContext.clock);
         if (today.minusYears(1).isAfter(endOfProduction))
-            p.setQuality(Math.min(p.getQuality() + 10, MAX_QUALITY));
+            c.setQuality(Math.min(c.getQuality() + 10, MAX_QUALITY));
         else if (today.minusMonths(1).isAfter(endOfProduction))
-            p.setQuality(Math.min(p.getQuality() + 1, MAX_QUALITY));
+            c.setQuality(Math.min(c.getQuality() + 1, MAX_QUALITY));
     }
 
     @Override

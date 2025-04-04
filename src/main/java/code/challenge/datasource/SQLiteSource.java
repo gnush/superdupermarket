@@ -1,7 +1,7 @@
 package code.challenge.datasource;
 
-import code.challenge.product.Product;
-import code.challenge.product.parse.Parse;
+import code.challenge.commodity.Commodity;
+import code.challenge.commodity.parse.Parse;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -18,8 +18,8 @@ public class SQLiteSource implements DataSource {
     }
 
     @Override
-    public @NotNull List<Product> getProducts() {
-        List<Product> products = new ArrayList<>();
+    public @NotNull List<Commodity> getCommodities() {
+        List<Commodity> commodities = new ArrayList<>();
 
         try (
                 Connection connection = DriverManager.getConnection("jdbc:sqlite:" + SQL_PATH);
@@ -28,28 +28,28 @@ public class SQLiteSource implements DataSource {
             ResultSet res = statement.executeQuery("select * from products");
 
             while (res.next()) {
-                var productType = res.getString("product_type");
-                var productLabel = res.getString("label");
-                var productQuality = res.getString("quality");
+                var commodityType = res.getString("product_type");
+                var commodityLabel = res.getString("label");
+                var commodityQuality = res.getString("quality");
                 var currencyType = res.getString("currency_type");
                 var currencyAmount = res.getString("currency_amount");
                 var expirationDate = res.getString("expiration_date");
 
                 var rule_args = parseRuleArgs(res.getString("rule_args"));
 
-                var product_args = expirationDate.isEmpty()
-                        ? List.of(productLabel, currencyType, currencyAmount, productQuality)
-                        : List.of(productLabel, currencyType, currencyAmount, productQuality, expirationDate);
+                var commodityArgs = expirationDate.isEmpty()
+                        ? List.of(commodityLabel, currencyType, currencyAmount, commodityQuality)
+                        : List.of(commodityLabel, currencyType, currencyAmount, commodityQuality, expirationDate);
 
-                Parse.product(productType, rule_args, product_args)
-                        .ifPresent(products::add);
+                Parse.commodity(commodityType, rule_args, commodityArgs)
+                        .ifPresent(commodities::add);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return products;
+        return commodities;
     }
 
     private @NotNull List<String> parseRuleArgs(@NotNull String ruleArgs) {
@@ -71,6 +71,6 @@ public class SQLiteSource implements DataSource {
     }
 
     public static @NotNull SQLiteSource defaultDatabase() {
-        return new SQLiteSource(Path.of("src","main","resources", "products.sqlite3"));
+        return new SQLiteSource(Path.of("src","main","resources", "commodities.sqlite3"));
     }
 }

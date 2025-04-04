@@ -1,10 +1,10 @@
-package code.challenge.product;
+package code.challenge.commodity;
 
 import code.challenge.SimulationContext;
 import code.challenge.currency.Currency;
 import code.challenge.observer.Observable;
-import code.challenge.observer.ProductChange;
-import code.challenge.product.rule.ProductRules;
+import code.challenge.observer.CommodityChange;
+import code.challenge.commodity.rule.CommodityRules;
 import code.challenge.util.Tuple4;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +12,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public class Product extends Observable<Product, ProductChange> {
+public class Commodity extends Observable<Commodity, CommodityChange> {
     @NotNull public final String label;
     @NotNull public final Currency basePrice;
     @NotNull public final ExpirationDate expirationDate;
 
     private int quality;
-    @NotNull private final ProductRules rules;
+    @NotNull private final CommodityRules rules;
 
     @NotNull private LocalDate lastDailyUpdate = LocalDate.now(SimulationContext.clock);
 
-    private Product(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate, @NotNull ProductRules rules) {
+    private Commodity(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate, @NotNull CommodityRules rules) {
         this.label = label;
         this.basePrice = basePrice;
         this.quality = quality;
@@ -31,7 +31,7 @@ public class Product extends Observable<Product, ProductChange> {
     }
 
     /**
-     * Calculates the daily accurate price of the Product
+     * Calculates the daily accurate price of the Commodity
      * @return The daily accurate price
      */
     public @NotNull Currency dailyPrice() {
@@ -39,8 +39,8 @@ public class Product extends Observable<Product, ProductChange> {
     }
 
     /**
-     * Checks if the Product needs to be removed from the inventory
-     * @return true if the Product should be removed, false otherwise.
+     * Checks if the Commodity needs to be removed from the inventory
+     * @return true if the Commodity should be removed, false otherwise.
      */
     public boolean toRemove() {
         return switch (expirationDate) {
@@ -57,7 +57,7 @@ public class Product extends Observable<Product, ProductChange> {
         if (lastDailyUpdate.isBefore(today)) {
             rules.dailyUpdate(this);
             lastDailyUpdate = today;
-            notifyObservers(this, ProductChange.DailyUpdate.getInstance());
+            notifyObservers(this, CommodityChange.DailyUpdate.getInstance());
         }
     }
 
@@ -71,9 +71,9 @@ public class Product extends Observable<Product, ProductChange> {
         this.quality = quality;
 
         if (change < 0)
-            this.notifyObservers(this, new ProductChange.QualityIncrease(Math.abs(change)));
+            this.notifyObservers(this, new CommodityChange.QualityIncrease(Math.abs(change)));
         else if (change > 0)
-            this.notifyObservers(this, new ProductChange.QualityDecrease(change));
+            this.notifyObservers(this, new CommodityChange.QualityDecrease(change));
     }
 
     public @NotNull String pretty() {
@@ -90,22 +90,22 @@ public class Product extends Observable<Product, ProductChange> {
     }
 
     @NotNull
-    public static Optional<Product> of(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ProductRules rules) {
+    public static Optional<Commodity> of(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull CommodityRules rules) {
         return of(label, basePrice, quality, ExpirationDate.DoesNotExpire.instance(), rules);
     }
 
     @NotNull
-    public static Optional<Product> of(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate, @NotNull ProductRules rules) {
+    public static Optional<Commodity> of(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate, @NotNull CommodityRules rules) {
         List<String> errors = rules.creationRules().stream()
                 .map(f -> f.apply(new Tuple4<>(label, basePrice, quality, expirationDate)))
                 .filter(Optional::isPresent).map(Optional::get).toList();
 
         if (!errors.isEmpty()) {
-            System.err.printf("Error during creation of product %s:%n", label);
+            System.err.printf("Error during creation of commodity %s:%n", label);
             errors.forEach(s -> System.err.println("\t"+s));
             return Optional.empty();
         }
 
-        return Optional.of(new Product(label, basePrice, quality, expirationDate, rules));
+        return Optional.of(new Commodity(label, basePrice, quality, expirationDate, rules));
     }
 }

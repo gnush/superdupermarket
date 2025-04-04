@@ -1,4 +1,4 @@
-package code.challenge.product.rule.modular;
+package code.challenge.commodity.rule.modular;
 
 import org.jetbrains.annotations.NotNull;
 
