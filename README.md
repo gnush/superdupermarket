@@ -6,7 +6,7 @@
 
 Manage the inventory of a market. Keep track of items that should be removed based on the expiration date or the quality.
 
-## Dependencies
+## Requires
 
 * Java >= 23
 
@@ -14,12 +14,22 @@ Manage the inventory of a market. Keep track of items that should be removed bas
 
 ### Execute manually
 
+#### Without runtime dependencies
+
 Run `mvn package` to package a jar with maven, then run
 ```
 java -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.Simulation [OPTIONS]
 ```
 to start a simulation.
 Include the `picocli.jar` from your local maven repository, usually found under `$HOME/.m2`.
+
+#### Bundled Jar
+
+Run `mvn compile assembly:single` to package a jar including the runtime dependencies with maven, then run
+```
+java -jar target/SuperDuperMarket-1.0-jar-with-dependencies.jar [OPTIONS]
+```
+to start a simulation.
 
 ### Parameters
 
