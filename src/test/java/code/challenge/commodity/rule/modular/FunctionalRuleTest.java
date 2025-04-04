@@ -1,13 +1,15 @@
 package code.challenge.commodity.rule.modular;
 
+import code.challenge.commodity.rule.modular.functional.AndThenRule;
+import code.challenge.commodity.rule.modular.functional.ComposeRule;
+import code.challenge.commodity.rule.modular.functional.MergeRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
-class ModularRuleTest {
+class FunctionalRuleTest {
     @Test
     @DisplayName("identity rule application")
     void identityRule() {
@@ -35,7 +37,7 @@ class ModularRuleTest {
     @DisplayName("compose (_+3)*2")
     void ruleComposition2() {
         var doubling = new SimpleRule<Integer, Integer>(i -> i*2);
-        Function<Integer, Integer> plus3 = i -> i+3;
+        var plus3 = new SimpleRule<Integer, Integer>(i -> i+3);
 
         assertEquals(
                 6,
@@ -46,7 +48,7 @@ class ModularRuleTest {
     @DisplayName("compose isEven(*2)")
     void ruleComposition3() {
         var isEven = new SimpleRule<Integer, Boolean>(i -> i%2==0);
-        Function<Integer, Integer> doubling = i -> i*2;
+        var doubling = new SimpleRule<Integer, Integer>(i -> i*2);
 
         var rule = new ComposeRule<>(isEven, doubling);
 
@@ -73,7 +75,7 @@ class ModularRuleTest {
     @DisplayName("*2 andThen +3")
     void ruleAndThen2() {
         var doubling = new SimpleRule<Integer, Integer>(i -> i*2);
-        Function<Integer, Integer> plus3 = i -> i+3;
+        var plus3 = new SimpleRule<Integer, Integer>(i -> i+3);
 
         assertEquals(
                 3,
@@ -84,7 +86,7 @@ class ModularRuleTest {
     @DisplayName("*2 andThen isEven")
     void ruleAndThen3() {
         var doubling = new SimpleRule<Integer, Integer>(i -> i*2);
-        Function<Integer, Boolean> isEven = i -> i%2==0;
+        var isEven = new SimpleRule<Integer, Boolean>(i -> i%2==0);
 
         var rule = new AndThenRule<>(doubling, isEven);
 

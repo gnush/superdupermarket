@@ -3,6 +3,7 @@ package code.challenge.currency;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public record EUR(BigDecimal amount) implements Currency {
     public EUR(double amount) {
@@ -28,5 +29,14 @@ public record EUR(BigDecimal amount) implements Currency {
     @NotNull
     public String toString() {
         return amount + " €";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (getClass() != o.getClass())
+            return false;
+
+        var other = (EUR) o;
+        return this.amount.setScale(other.amount.scale(), RoundingMode.HALF_UP).equals(other.amount);
     }
 }

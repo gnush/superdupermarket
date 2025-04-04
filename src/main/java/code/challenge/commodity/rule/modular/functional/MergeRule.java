@@ -1,11 +1,11 @@
-package code.challenge.commodity.rule.modular;
+package code.challenge.commodity.rule.modular.functional;
 
+import code.challenge.commodity.rule.modular.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
-public class MergeRule<I, O1, O2, O> extends AbstractRule<I, O> {
+public class MergeRule<I, O1, O2, O> implements Rule<I, O> {
     private final @NotNull Rule<I, O1> lhs;
     private final @NotNull Rule<I, O2> rhs;
     private final @NotNull BiFunction<O1, O2, O> merge;
@@ -17,7 +17,7 @@ public class MergeRule<I, O1, O2, O> extends AbstractRule<I, O> {
     }
 
     @Override
-    public @NotNull Function<I, O> getRule() {
-        return x -> merge.apply(lhs.apply(x), rhs.apply(x));
+    public @NotNull O apply(@NotNull I x) {
+        return merge.apply(lhs.apply(x), rhs.apply(x));
     }
 }

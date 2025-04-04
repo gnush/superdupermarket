@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-public class SimpleRule<I, O> extends AbstractRule<I, O> {
+public class SimpleRule<I, O> implements Rule<I, O> {
     private final @NotNull Function<I, O> f;
 
     public SimpleRule(@NotNull Function<I, O> f) {
@@ -12,8 +12,8 @@ public class SimpleRule<I, O> extends AbstractRule<I, O> {
     }
 
     @Override
-    public @NotNull Function<I, O> getRule() {
-        return f;
+    public @NotNull O apply(@NotNull I x) {
+        return f.apply(x);
     }
 
     public static <T> @NotNull SimpleRule<T, T> identity() {

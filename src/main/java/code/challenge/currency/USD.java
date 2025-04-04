@@ -3,6 +3,7 @@ package code.challenge.currency;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public record USD(BigDecimal amount) implements Currency {
     public USD(double amount) {
@@ -27,6 +28,15 @@ public record USD(BigDecimal amount) implements Currency {
     @Override
     @NotNull
     public String toString() {
-        return amount + " $";
+        return "$"+amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (getClass() != o.getClass())
+            return false;
+
+        var other = (USD) o;
+        return this.amount.setScale(other.amount.scale(), RoundingMode.HALF_UP).equals(other.amount);
     }
 }

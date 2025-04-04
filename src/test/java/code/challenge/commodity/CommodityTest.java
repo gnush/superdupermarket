@@ -85,6 +85,22 @@ public class CommodityTest {
     }
 
     @Test
+    @DisplayName("expirable commodity toString correct")
+    void generalExpirableCommodityToString() {
+        var maybeCommodity = expiresIn.apply(1);
+
+        assertTrue(maybeCommodity.isPresent());
+        var commodity = maybeCommodity.get();
+
+        assertEquals(
+                String.format(
+                        "%s: basePrice='%s' quality=%s expiresOn=%s",
+                        commodity.label, commodity.basePrice, commodity.getQuality(), commodity.expirationDate
+                ),
+                commodity.toString());
+    }
+
+    @Test
     @DisplayName("non-expirable commodity overview correct")
     void generalNonExpirableCommodityOverview() {
         var maybeCommodity = nonExpirableCommodity.get();
