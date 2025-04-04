@@ -23,18 +23,18 @@ Include the `picocli.jar` from your local maven repository, usually found under 
 
 ### Parameters
 
-Use the `--help` to print the parameter overview on your command line.
+Use `--help` to print the parameter overview on your command line.
 
-| Parameter       | Description                                                                                |
-|-----------------|--------------------------------------------------------------------------------------------|
-| SIM             | The simulation to run                                                                      |
-| -n. --days      | Number of days to simulate <br>Default: 10                                                 |
-| -d, --startDay  | The first day of the simulation. <br> Format: YYYY-MM-DD                                   |
-| -r, --remove    | Insufficient products will be removed from the inventory at the end of each simulation day |
-| -s, --source    | Use the standard 'static', 'csv' or 'sqlite' source for the inventory. <br>Default: static |
-| -f, --file      | The csv file or sqlite database to use. <br>-s is ignored if -f is set                     |
-| -c, --delimiter | The cell delimiter of the csv file. <br>Use when providing a .csv file with -f             |
-| -h, --help      | Print a help message                                                                       |
+| Parameter      | Description                                                                                                           |
+|----------------|-----------------------------------------------------------------------------------------------------------------------|
+| -e, --exec     | The simulation to execute. Check table below for possible values. <br>Default: inventory                              |
+| -n, --days     | Number of days to simulate <br>Default: 10                                                                            |
+| -d, --startDay | The first day of the simulation. <br> Format: YYYY-MM-DD                                                              |
+| -c, --clean    | Insufficient products will be removed from the inventory at the end of each simulation day                            |
+| -s, --source   | Use the standard 'static', 'csv' or 'sqlite' source for the inventory. <br>Ignored when -f is set <br>Default: static |
+| -f, --file     | The csv file or sqlite database to use. <br>-s is ignored if -f is set                                                |
+| --delimiter    | The cell delimiter of the csv file. <br>Use when providing a .csv file with -f                                        |
+| -h, --help     | Print a help message                                                                                                  |
 
 | SIM        | Description                                                                                                 |
 |------------|-------------------------------------------------------------------------------------------------------------|
