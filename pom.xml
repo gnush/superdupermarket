@@ -68,6 +68,7 @@
                                 <argument>-classpath</argument>
                                 <classpath/>
                                 <argument>code.challenge.Simulation</argument>
+                                <argument>--exec</argument>
                                 <argument>inventory</argument>
                             </arguments>
                         </configuration>
@@ -83,6 +84,7 @@
                                 <argument>-classpath</argument>
                                 <classpath/>
                                 <argument>code.challenge.Simulation</argument>
+                                <argument>--exec</argument>
                                 <argument>quality</argument>
                             </arguments>
                         </configuration>
@@ -98,6 +100,7 @@
                                 <argument>-classpath</argument>
                                 <classpath/>
                                 <argument>code.challenge.Simulation</argument>
+                                <argument>--exec</argument>
                                 <argument>autoremove</argument>
                             </arguments>
                         </configuration>

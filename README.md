@@ -16,7 +16,7 @@ Manage the inventory of a market. Keep track of items that should be removed bas
 
 Run `mvn package` to package a jar with maven, then run
 ```
-java -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.Simulation [OPTIONS] [SIM]
+java -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.Simulation [OPTIONS]
 ```
 to start a simulation.
 Include the `picocli.jar` from your local maven repository, usually found under `$HOME/.m2`.
@@ -55,7 +55,7 @@ to start the respective simulation with default parameters.
 
 Run
 ```
-mvn exec:java -Dexec.mainClass="code.challenge.Simulation" -Dexec.args="[OPTIONS] [SIM]"
+mvn exec:java -Dexec.mainClass="code.challenge.Simulation" -Dexec.args="[OPTIONS]"
 ```
 to start a simulation.
 
