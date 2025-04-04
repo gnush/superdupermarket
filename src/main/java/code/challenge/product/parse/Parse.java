@@ -8,6 +8,7 @@ import code.challenge.product.Product;
 import code.challenge.product.ProductLookup;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public final class Parse {
 
     @NotNull
     private static Currency parseCurrency(@NotNull String TYPE, @NotNull String amount) throws NumberFormatException {
-        double _amount = Double.parseDouble(amount);
+        BigDecimal _amount = new BigDecimal(amount);
 
         return switch (TYPE.toUpperCase()) {
             case "EUR" -> new EUR(_amount);
