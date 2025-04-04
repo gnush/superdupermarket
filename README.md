@@ -16,7 +16,7 @@ Manage the inventory of a market. Keep track of items that should be removed bas
 
 Run `mvn package` to package a jar with maven, then run
 ```
-java -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.SIMULATION [-n DAYS] [-s DATASOURCE] [-f FILE]
+java -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.Simulation [OPTIONS] [SIM]
 ```
 to start a simulation.
 Include the `picocli.jar` from your local maven repository, usually found under `$HOME/.m2`.
@@ -25,40 +25,37 @@ Include the `picocli.jar` from your local maven repository, usually found under 
 
 Use the `--help` to print the parameter overview on your command line.
 
-| Parameter  | Description                                                                                |
-|------------|--------------------------------------------------------------------------------------------|
-| SIMULATION | The entry point to run                                                                     |
-| DAYS       | Number of days to simulate <br>Default: 10                                                 |
-| DATASOURCE | Use the standard 'static', 'csv' or 'sqlite' source for the inventory. <br>Default: static |
-| FILE       | The csv file or sqlite database to use. <br>-s is ignored if -f is set                     |
+| Parameter       | Description                                                                                |
+|-----------------|--------------------------------------------------------------------------------------------|
+| SIM             | The simulation to run                                                                      |
+| -n. --days      | Number of days to simulate <br>Default: 10                                                 |
+| -d, --startDay  | The first day of the simulation. <br> Format: YYYY-MM-DD                                   |
+| -r, --remove    | Insufficient products will be removed from the inventory at the end of each simulation day |
+| -s, --source    | Use the standard 'static', 'csv' or 'sqlite' source for the inventory. <br>Default: static |
+| -f, --file      | The csv file or sqlite database to use. <br>-s is ignored if -f is set                     |
+| -c, --delimiter | The cell delimiter of the csv file. <br>Use when providing a .csv file with -f             |
+| -h, --help      | Print a help message                                                                       |
 
-| SIMULATION                                | Description                                                                                                 |
-|-------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| ProductInventorySimulation                | Prints the status of the inventory on each day                                                              |
-| ProductInventoryQualityObserverSimulation | Notifies about the daily quality changes of the inventory                                                   |
-| ProductInventoryObserverSimulation        | Notifies about the daily quality changes and automatically removes insufficient products from the inventory |
+| SIM        | Description                                                                                                 |
+|------------|-------------------------------------------------------------------------------------------------------------|
+| inventory  | Prints the status of the inventory on each day                                                              |
+| quality    | Notifies about the daily quality changes of the inventory                                                   |
+| autoremove | Notifies about the daily quality changes and automatically removes insufficient products from the inventory |
 
 ### Execute with maven
 
 #### Default execution configurations
 Run
 ```
-exec:exec@ID
+mvn exec:exec@SIM
 ```
-to start a simulation with standard parameters.
-
-| ID                             | Equivalent SIMULATION                     |
-|--------------------------------|-------------------------------------------|
-| inventory-simulation           | ProductInventorySimulation                |
-| quality-simulation             | ProductInventoryQualityObserverSimulation |
-| remove-insufficient-simulation | ProductInventoryObserverSimulation        |
-
+to start the respective simulation with default parameters.
 
 #### Custom executions with maven
 
 Run
 ```
-mvn exec:java -Dexec.mainClass="code.challenge.SIMULATION" -Dexec.args="[-n DAYS] [-s DATASOURCE] [-f FILE]"
+mvn exec:java -Dexec.mainClass="code.challenge.Simulation" -Dexec.args="[OPTIONS] [SIM]"
 ```
 to start a simulation.
 

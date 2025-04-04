@@ -58,7 +58,7 @@
                 <version>3.5.0</version>
                 <executions>
                     <execution>
-                        <id>inventory-simulation</id>
+                        <id>inventory</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -67,12 +67,13 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>code.challenge.ProductInventorySimulation</argument>
+                                <argument>code.challenge.Simulation</argument>
+                                <argument>inventory</argument>
                             </arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>quality-simulation</id>
+                        <id>quality</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -81,12 +82,13 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>code.challenge.ProductInventoryQualityObserverSimulation</argument>
+                                <argument>code.challenge.Simulation</argument>
+                                <argument>quality</argument>
                             </arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>remove-insufficient-simulation</id>
+                        <id>autoremove</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -95,7 +97,8 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>code.challenge.ProductInventoryObserverSimulation</argument>
+                                <argument>code.challenge.Simulation</argument>
+                                <argument>autoremove</argument>
                             </arguments>
                         </configuration>
                     </execution>
