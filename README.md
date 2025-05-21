@@ -25,7 +25,7 @@ Execute a simulation spanning multiple days.
 
 Run `mvn package` to package a jar with maven, then run
 ```
-java -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.Simulation [OPTIONS]
+java --enable-native-access=ALL-UNNAMED -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.Simulation [OPTIONS]
 ```
 to start a simulation.
 Include the `picocli.jar` from your local maven repository, usually found under `$HOME/.m2`.
@@ -34,7 +34,7 @@ Include the `picocli.jar` from your local maven repository, usually found under 
 
 Run `mvn compile assembly:single` to package a jar including the runtime dependencies with maven, then run
 ```
-java -jar target/SuperDuperMarket-1.0-jar-with-dependencies.jar [OPTIONS]
+java --enable-native-access=ALL-UNNAMED -jar target/SuperDuperMarket-1.0-jar-with-dependencies.jar [OPTIONS]
 ```
 to start a simulation.
 
@@ -42,22 +42,27 @@ to start a simulation.
 
 Use `--help` to print the parameter overview on your command line.
 
-| Parameter      | Description                                                                                                           |
-|----------------|-----------------------------------------------------------------------------------------------------------------------|
-| -e, --exec     | The simulation to execute. Check table below for possible values. <br>Default: inventory                              |
-| -n, --days     | Number of days to simulate <br>Default: 10                                                                            |
-| -d, --startDay | The first day of the simulation. <br> Format: YYYY-MM-DD                                                              |
-| -c, --clean    | Insufficient Commodities will be removed from the inventory at the end of each simulation day                         |
-| -s, --source   | Use the standard 'static', 'csv' or 'sqlite' source for the inventory. <br>Ignored when -f is set <br>Default: static |
-| -f, --file     | The csv file or sqlite database to use. <br>-s is ignored if -f is set                                                |
-| --delimiter    | The cell delimiter of the csv file. <br>Use when providing a .csv file with -f                                        |
-| -h, --help     | Print a help message                                                                                                  |
+| Parameter      | Description                                                                                             |
+|----------------|---------------------------------------------------------------------------------------------------------|
+| -e, --exec     | The simulation to execute. Check table below for possible values. <br>Default: inventory                |
+| -n, --days     | Number of days to simulate <br>Default: 10                                                              |
+| -d, --startDay | The first day of the simulation. <br> Format: YYYY-MM-DD                                                |
+| -c, --clean    | Insufficient Commodities will be removed from the inventory at the end of each simulation day           |
+| -s, --source   | Use the standard 'static', 'csv', 'sqlite' or 'hibernate' source for the inventory. <br>Default: static |
+| -f, --file     | The csv file or sqlite database to use. <br>Use in combination with -s csv\|sqlite                      |
+| --delimiter    | The cell delimiter of the csv file. <br>Use when providing a .csv file with -f                          |
+| -h, --help     | Print a help message                                                                                    |
 
 | SIM        | Description                                                                                                    |
 |------------|----------------------------------------------------------------------------------------------------------------|
 | inventory  | Prints the status of the inventory on each day                                                                 |
 | quality    | Notifies about the daily quality changes of the inventory                                                      |
 | autoremove | Notifies about the daily quality changes and automatically removes insufficient Commodities from the inventory |
+
+### Populate Hibernate Database
+
+Use `code.challenge.PopulateDatabase` to populate the database used by hibernate with default data.
+Supply the argument `fresh` to purge the existing commodity entries.
 
 ### Execute with maven
 

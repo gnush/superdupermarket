@@ -6,6 +6,7 @@ import code.challenge.currency.USD;
 import code.challenge.commodity.ExpirationDate;
 import code.challenge.commodity.Commodity;
 import code.challenge.commodity.CommodityLookup;
+import code.challenge.datasource.db.CommodityEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -33,13 +34,40 @@ public final class Parse {
     }
 
     @NotNull
+    public static Optional<Commodity> fromEntity(CommodityEntity entity) {
+        try {
+            return Commodity.of(
+                    entity.getLabel(),
+                    parseCurrency(entity.getCurrency(), entity.getBasePrice()),
+                    entity.getQuality(),
+                    entity.getExpirationDate(),
+                    CommodityLookup.getCommodityRules(
+                            entity.getCategory().getName(),
+                            entity.getExtraAttributes()
+                    ).get()
+            );
+        } catch (Exception _) {
+            return Optional.empty();
+        }
+    }
+
+    @NotNull
     private static Currency parseCurrency(@NotNull String TYPE, @NotNull String amount) throws NumberFormatException {
         BigDecimal _amount = new BigDecimal(amount);
 
         return switch (TYPE.toUpperCase()) {
             case "EUR" -> new EUR(_amount);
             case "USD" -> new USD(_amount);
-            default -> throw new IllegalArgumentException(TYPE + " is not supported");
+            default -> throw new IllegalArgumentException("currency '" + TYPE + "' is not supported");
+        };
+    }
+
+    @NotNull
+    private static Currency parseCurrency(@NotNull String TYPE, @NotNull BigDecimal amount) {
+        return switch (TYPE.toUpperCase()) {
+            case "EUR" -> new EUR(amount);
+            case "USD" -> new USD(amount);
+            default -> throw new IllegalArgumentException("currency '" + TYPE + "' is not supported");
         };
     }
 }

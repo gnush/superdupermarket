@@ -8,6 +8,7 @@ import picocli.CommandLine;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.logging.Level;
 
 @CommandLine.Command(name = "Commodity Inventory Simulation", version = "1.0", mixinStandardHelpOptions = true)
 public class Simulation implements Runnable {
@@ -27,7 +28,7 @@ public class Simulation implements Runnable {
     LocalDate simulationStartDate = LocalDate.now();
 
     @CommandLine.Option(names = { "-s", "--source" }, paramLabel = "TYPE", defaultValue = "static",
-            description = "Source type to use. @|underline TYPE|@ can be static, csv, sqlite. (default: "+DEFAULT_VALUE+"). Option is ignored when @|underline -f|@ is set")
+            description = "Source type to use. @|underline TYPE|@ can be static, csv, sqlite, hibernate. (default: "+DEFAULT_VALUE+").")
     @NotNull String sourceType = "static";
 
     @CommandLine.Option(names = { "-f", "--file" }, paramLabel = "FILE", description = "The csv file or sqlite database to use")
@@ -43,6 +44,7 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         DataSource source = ArgumentParser.parseDataSourceArgs(sourceType, path, csvDelimiter);
         SimulationContext.setClock(simulationStartDate);
 
