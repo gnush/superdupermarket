@@ -10,4 +10,10 @@ public sealed interface Currency permits EUR, USD {
 
     @NotNull
     Currency add(@NotNull Currency other);
+
+    @NotNull
+    BigDecimal amount();
+
+    @NotNull
+    String currencyCode();
 }

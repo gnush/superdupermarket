@@ -17,4 +17,8 @@ public class SimulationContext {
     public static void setClock(LocalDate day) {
         clock = clock(day);
     }
+
+    public static LocalDate now() {
+        return LocalDate.now(clock);
+    }
 }

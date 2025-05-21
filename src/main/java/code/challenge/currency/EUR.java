@@ -26,6 +26,11 @@ public record EUR(BigDecimal amount) implements Currency {
     }
 
     @Override
+    public @NotNull String currencyCode() {
+        return "EUR";
+    }
+
+    @Override
     @NotNull
     public String toString() {
         return amount + " €";

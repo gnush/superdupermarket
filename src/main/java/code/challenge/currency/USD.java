@@ -26,6 +26,11 @@ public record USD(BigDecimal amount) implements Currency {
     }
 
     @Override
+    public @NotNull String currencyCode() {
+        return "USD";
+    }
+
+    @Override
     @NotNull
     public String toString() {
         return "$"+amount;
