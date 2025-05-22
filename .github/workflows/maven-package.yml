@@ -1,7 +1,7 @@
 name: Jar
 
 env:
-  bundled: jar-with-dependencies
+  assembly_name: jar-with-dependencies
 
 on:
   workflow_run:
@@ -29,16 +29,14 @@ jobs:
       - name: Jar
         run: mvn -B package --file pom.xml
       - name: Bundled Jar
-        run: mvn -B compile assembly:single --file pom.xml
+        run: mvn -B clean compile assembly:single --file pom.xml
       - name: Set project properties in env
         run: |
           echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
           echo "name=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec)" >> $GITHUB_ENV
           echo "today=$(date -u +'%Y-%m-%d')" >> $GITHUB_ENV
-      - name: Rename Jars
-        run: |
-          mv target/${{ env.name }}-${{ env.version }}.jar ${{ env.name }}-${{ env.today }}.jar
-          mv target/${{ env.name }}-${{ env.version }}-${{ env.bundled }}.jar ${{ env.name }}-${{ env.today }}-${{ env.bundled }}.jar
+      - name: Rename Bundled Jar
+        run: mv target/${{ env.name }}-${{ env.version }}-${{ env.assembly_name }}.jar ${{ env.name }}-${{ env.today }}.jar
       - name: Make dev Release
         uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
@@ -48,4 +46,3 @@ jobs:
           title: "Development Build"
           files: |
             ${{ env.name }}-${{ env.today }}.jar
-            ${{ env.name }}-${{ env.today }}-${{ env.bundled }}.jar
