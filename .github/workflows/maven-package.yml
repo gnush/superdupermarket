@@ -1,5 +1,8 @@
 name: Jar
 
+env:
+  bundled: jar-with-dependencies
+
 on:
   workflow_run:
     workflows: [ "tests" ]
@@ -23,5 +26,26 @@ jobs:
           java-version: '23'
           distribution: 'temurin'
           cache: maven
-      - name: Package with maven
+      - name: Jar
         run: mvn -B package --file pom.xml
+      - name: Bundled Jar
+        run: mvn -B compile assembly:single --file pom.xml
+      - name: Set project properties in env
+        run: |
+          echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+          echo "name=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec)" >> $GITHUB_ENV
+          echo "today=$(date -u +'%Y-%m-%d')" >> $GITHUB_ENV
+      - name: Rename Jars
+        run: |
+          mv target/${{ env.name }}-${{ env.version }}.jar ${{ env.name }}-${{ env.today }}.jar
+          mv target/${{ env.name }}-${{ env.version }}-${{ env.bundled }}.jar ${{ env.name }}-${{ env.today }}-${{ env.bundled }}.jar
+      - name: Make dev Release
+        uses: marvinpinto/action-automatic-releases@v1.2.1
+        with:
+          repo_token: "${{ secrets.RELEASE }}"
+          automatic_release_tag: "dev"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            ${{ env.name }}-${{ env.today }}.jar
+            ${{ env.name }}-${{ env.today }}-${{ env.bundled }}.jar
