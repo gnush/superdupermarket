@@ -9,7 +9,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="current_session_context_class">thread</property>
 
-        <mapping class="code.challenge.datasource.db.CommodityCategory" />
-        <mapping class="code.challenge.datasource.db.CommodityEntity" />
+        <mapping class="io.github.gnush.datasource.db.CommodityCategory" />
+        <mapping class="io.github.gnush.datasource.db.CommodityEntity" />
     </session-factory>
 </hibernate-configuration>

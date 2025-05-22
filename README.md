@@ -25,7 +25,7 @@ Execute a simulation spanning multiple days.
 
 Run `mvn package` to package a jar with maven, then run
 ```
-java --enable-native-access=ALL-UNNAMED -cp target/SuperDuperMarket-1.0.jar:/PATH/TO/picocli-4.7.6.jar code.challenge.Simulation [OPTIONS]
+java --enable-native-access=ALL-UNNAMED -cp target/SuperDuperMarket-1.0.0.jar:/PATH/TO/picocli-4.7.6.jar io.github.gnush.Simulation [OPTIONS]
 ```
 to start a simulation.
 Include the `picocli.jar` from your local maven repository, usually found under `$HOME/.m2`.
@@ -34,7 +34,7 @@ Include the `picocli.jar` from your local maven repository, usually found under 
 
 Run `mvn compile assembly:single` to package a jar including the runtime dependencies with maven, then run
 ```
-java --enable-native-access=ALL-UNNAMED -jar target/SuperDuperMarket-1.0-jar-with-dependencies.jar [OPTIONS]
+java --enable-native-access=ALL-UNNAMED -jar target/SuperDuperMarket-1.0.0-jar-with-dependencies.jar [OPTIONS]
 ```
 to start a simulation.
 
@@ -61,7 +61,7 @@ Use `--help` to print the parameter overview on your command line.
 
 ### Populate Hibernate Database
 
-Use `code.challenge.PopulateDatabase` to populate the database used by hibernate with default data.
+Use `io.github.gnush.PopulateDatabase` to populate the database used by hibernate with default data.
 Supply the argument `fresh` to purge the existing commodity entries.
 
 ### Execute with maven
@@ -77,7 +77,7 @@ to start the respective simulation with default parameters.
 
 Run
 ```
-mvn exec:java -Dexec.mainClass="code.challenge.Simulation" -Dexec.args="[OPTIONS]"
+mvn exec:java -Dexec.mainClass="io.github.gnush.Simulation" -Dexec.args="[OPTIONS]"
 ```
 to start a simulation.
 

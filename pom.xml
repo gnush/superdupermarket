@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>code.challenge</groupId>
+    <groupId>io.github.gnush</groupId>
     <artifactId>SuperDuperMarket</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>23</maven.compiler.source>
@@ -69,7 +69,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>code.challenge.Simulation</mainClass>
+                            <mainClass>io.github.gnush.Simulation</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -94,7 +94,7 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>code.challenge.Simulation</argument>
+                                <argument>io.github.gnush.Simulation</argument>
                                 <argument>--exec</argument>
                                 <argument>inventory</argument>
                             </arguments>
@@ -110,7 +110,7 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>code.challenge.Simulation</argument>
+                                <argument>io.github.gnush.Simulation</argument>
                                 <argument>--exec</argument>
                                 <argument>quality</argument>
                             </arguments>
@@ -126,7 +126,7 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>code.challenge.Simulation</argument>
+                                <argument>io.github.gnush.Simulation</argument>
                                 <argument>--exec</argument>
                                 <argument>autoremove</argument>
                             </arguments>
