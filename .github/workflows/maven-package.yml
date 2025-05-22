@@ -36,7 +36,7 @@ jobs:
           echo "name=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec)" >> $GITHUB_ENV
           echo "today=$(date -u +'%Y-%m-%d')" >> $GITHUB_ENV
       - name: Rename Bundled Jar
-        run: mv target/${{ env.name }}-${{ env.version }}-${{ env.assembly_name }}.jar ${{ env.name }}-${{ env.today }}.jar
+        run: mv target/${{ env.name }}-${{ env.version }}-${{ env.assembly_name }}.jar target/${{ env.name }}-${{ env.today }}.jar
       - name: Grant execute to makeBundle.sh
         run: chmod +x makeBundle.sh
       - name: Package bundle
