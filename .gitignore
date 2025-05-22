@@ -126,4 +126,4 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # Hibernate Controlled DB
-data/commodities.sqlite3
+data/commodities.db

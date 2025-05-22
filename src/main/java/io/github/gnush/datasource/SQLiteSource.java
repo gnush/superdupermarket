@@ -71,6 +71,6 @@ public class SQLiteSource implements DataSource {
     }
 
     public static @NotNull SQLiteSource defaultDatabase() {
-        return new SQLiteSource(Path.of("src","main","resources", "commodities.sqlite3"));
+        return new SQLiteSource(Path.of("data","commodities.sqlite3"));
     }
 }

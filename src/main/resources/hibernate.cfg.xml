@@ -3,7 +3,7 @@
         <!-- SQLite -->
         <property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
         <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
-        <property name="hibernate.connection.url">jdbc:sqlite:data/commodities.sqlite3</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:data/commodities.db</property>
 
         <property name="hibernate.show_sql">false</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
