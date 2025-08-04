@@ -1,8 +1,10 @@
 package io.github.gnush.currency;
 
+import io.github.gnush.SimulationContext;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,6 +27,42 @@ public class CurrencyTest {
         assertEquals(
                 "$1.5",
                 new USD(oneDotFive).toString()
+        );
+    }
+
+    @Test
+    void eurEquals() {
+        assertEquals(
+                new EUR(new BigDecimal("1.0")),
+                new EUR(new BigDecimal("1.0"))
+        );
+
+        assertEquals(
+                new EUR(new BigDecimal("1.00")),
+                new EUR(new BigDecimal("1.0"))
+        );
+
+        assertEquals(
+                new EUR(new BigDecimal("1.0")),
+                new EUR(new BigDecimal("1.00"))
+        );
+    }
+
+    @Test
+    void usdEquals() {
+        assertEquals(
+                new USD(new BigDecimal("1.0")),
+                new USD(new BigDecimal("1.0"))
+        );
+
+        assertEquals(
+                new USD(new BigDecimal("1.00")),
+                new USD(new BigDecimal("1.0"))
+        );
+
+        assertEquals(
+                new USD(new BigDecimal("1.0")),
+                new USD(new BigDecimal("1.00"))
         );
     }
 
@@ -88,19 +126,30 @@ public class CurrencyTest {
 
     @Test
     void addEurToUsd() {
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> new USD(1).add(new EUR(1)),
-                "Interchanging currencies is not supported"
+        SimulationContext.setClock(LocalDate.of(2000, 1, 1));
+
+        assertEquals(
+                new USD(new BigDecimal("2.0046")),
+                new USD(1).add(new EUR(1))
         );
     }
 
     @Test
     void addUsdToEur() {
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> new EUR(1).add(new USD(1)),
-                "Interchanging currencies is not supported"
+        SimulationContext.setClock(LocalDate.of(2000, 1, 1));
+
+        assertEquals(
+                new EUR(new BigDecimal("1.99542")),
+                new EUR(1).add(new USD(1))
         );
     }
+
+//    @Test
+//    void addUsdToEur() {
+//        assertThrows(
+//                UnsupportedOperationException.class,
+//                () -> new EUR(1).add(new USD(1)),
+//                "Interchanging currencies is not supported"
+//        );
+//    }
 }

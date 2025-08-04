@@ -15,5 +15,5 @@ public sealed interface Currency permits EUR, USD {
     BigDecimal amount();
 
     @NotNull
-    String currencyCode();
+    String isoCode();
 }

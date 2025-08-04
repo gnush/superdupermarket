@@ -55,7 +55,7 @@ public class CommodityEntity {
 
     public CommodityEntity(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate) {
         this.label = label;
-        this.currency = basePrice.currencyCode();
+        this.currency = basePrice.isoCode();
         this.basePrice = basePrice.amount();
         this.expirationDate = expirationDate;
         this.quality = quality;
@@ -65,7 +65,7 @@ public class CommodityEntity {
     public CommodityEntity(@NotNull String category, @NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate) {
         this.category = new CommodityCategory(category);
         this.label = label;
-        this.currency = basePrice.currencyCode();
+        this.currency = basePrice.isoCode();
         this.basePrice = basePrice.amount();
         this.expirationDate = expirationDate;
         this.quality = quality;
@@ -74,7 +74,7 @@ public class CommodityEntity {
 
     public CommodityEntity(@NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate, @NotNull List<String> extraAttributes) {
         this.label = label;
-        this.currency = basePrice.currencyCode();
+        this.currency = basePrice.isoCode();
         this.basePrice = basePrice.amount();
         this.expirationDate = expirationDate;
         this.quality = quality;
@@ -84,7 +84,7 @@ public class CommodityEntity {
     public CommodityEntity(@NotNull String category, @NotNull String label, @NotNull Currency basePrice, int quality, @NotNull ExpirationDate expirationDate, @NotNull List<String> extraAttributes) {
         this.category = new CommodityCategory(category);
         this.label = label;
-        this.currency = basePrice.currencyCode();
+        this.currency = basePrice.isoCode();
         this.basePrice = basePrice.amount();
         this.expirationDate = expirationDate;
         this.quality = quality;
