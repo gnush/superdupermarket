@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 public class UpdateRuleTest {
     Commodity commodity1 = null;
@@ -19,7 +21,7 @@ public class UpdateRuleTest {
     void setCommodity() {
         commodity1 = Commodity.of(
                 "Test",
-                new EUR(1),
+                new EUR(BigDecimal.ONE),
                 1,
                 new GeneralRules()
         ).orElseThrow(

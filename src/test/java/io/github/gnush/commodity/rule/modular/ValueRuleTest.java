@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +21,7 @@ public class ValueRuleTest {
     void setCommodity() {
         commodity1 = Commodity.of(
                 "Test",
-                new EUR(1),
+                new EUR(BigDecimal.ONE),
                 1,
                 new GeneralRules()
         ).orElseThrow(
@@ -29,7 +30,7 @@ public class ValueRuleTest {
 
         commodity2 = Commodity.of(
                 "perishable",
-                new EUR(1),
+                new EUR(BigDecimal.TWO),
                 -2,
                 new ExpirationDate.ExpiresAt(LocalDate.of(1900, 1, 1)),
                 new GeneralRules()
@@ -59,6 +60,18 @@ public class ValueRuleTest {
         assertEquals(
                 -2,
                 quality().apply(commodity2)
+        );
+    }
+
+    @Test
+    void accessCommodityBasePriceRuleStyle() {
+        assertEquals(
+                new EUR(BigDecimal.ONE),
+                basePrice().apply(commodity1)
+        );
+        assertEquals(
+                new EUR(BigDecimal.TWO),
+                basePrice().apply(commodity2)
         );
     }
 

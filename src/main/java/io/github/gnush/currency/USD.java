@@ -7,10 +7,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public record USD(BigDecimal amount) implements Currency {
-    public USD(double amount) {
-        this(BigDecimal.valueOf(amount));
-    }
-
     @Override
     @NotNull
     public Currency add(BigDecimal amount) {
@@ -28,7 +24,7 @@ public record USD(BigDecimal amount) implements Currency {
             if (exchangeRate.isPresent())
                 return new USD(amount.add(other.amount().multiply(exchangeRate.get())));
             else
-                throw new IllegalArgumentException("Cannot exchange " + isoCode() + " to " + other.isoCode());
+                throw new IllegalArgumentException("Cannot exchange " + other.isoCode() + " to " + isoCode());
         }
     }
 

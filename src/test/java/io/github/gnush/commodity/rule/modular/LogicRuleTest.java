@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +22,7 @@ public class LogicRuleTest {
     void setCommodity() {
         commodity1 = Commodity.of(
                 "Test",
-                new EUR(1),
+                new EUR(BigDecimal.ONE),
                 1,
                 new GeneralRules()
         ).orElseThrow(
@@ -30,7 +31,7 @@ public class LogicRuleTest {
 
         commodity2 = Commodity.of(
                 "Also Test",
-                new EUR(1),
+                new EUR(BigDecimal.ONE),
                 2,
                 new ExpirationDate.ExpiresAt(LocalDate.of(1900, 1, 1)),
                 new GeneralRules()

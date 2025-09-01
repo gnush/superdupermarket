@@ -26,7 +26,7 @@ public class ArithmeticRuleTest {
     void setCommodity() {
         commodity1 = Commodity.of(
                 "Test",
-                new EUR(1),
+                new EUR(BigDecimal.ONE),
                 1,
                 new GeneralRules()
         ).orElseThrow(
@@ -35,7 +35,7 @@ public class ArithmeticRuleTest {
 
         commodity2 = Commodity.of(
                 "Test",
-                new EUR(1),
+                new EUR(BigDecimal.ONE),
                 -2,
                 new ExpirationDate.ExpiresAt(LocalDate.of(1900, 1, 1)),
                 new GeneralRules()

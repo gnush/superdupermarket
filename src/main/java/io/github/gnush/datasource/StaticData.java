@@ -10,6 +10,7 @@ import io.github.gnush.commodity.rule.GeneralRules;
 import io.github.gnush.commodity.rule.WineRules;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -33,12 +34,12 @@ public final class StaticData implements DataSource {
     @Override
     public @NotNull List<Commodity> getCommodities() {
         var l = List.of(
-                Commodity.of("Stinker", new EUR(42), 30, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(60)), new CheeseRules()),
-                Commodity.of("Roter", new EUR(4.2), 40, new WineRules()),
-                Commodity.of("Weisser", new EUR(1), 15, new WineRules()),
-                Commodity.of("Riecht Streng", new EUR(4.4), 45, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)), new CheeseRules()),
-                Commodity.of("GenericStuff", new EUR(0.4), 10, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(9)), new GeneralRules()),
-                Commodity.of("Schlacke", new USD(2.4), 5, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusYears(2)), new GeneralRules())
+                Commodity.of("Stinker", new EUR(new BigDecimal("42")), 30, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(60)), new CheeseRules()),
+                Commodity.of("Roter", new EUR(new BigDecimal("4.2")), 40, new WineRules()),
+                Commodity.of("Weisser", new EUR(new BigDecimal("1")), 15, new WineRules()),
+                Commodity.of("Riecht Streng", new EUR(new BigDecimal("4.4")), 45, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(75)), new CheeseRules()),
+                Commodity.of("GenericStuff", new EUR(new BigDecimal("0.4")), 10, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusDays(9)), new GeneralRules()),
+                Commodity.of("Schlacke", new USD(new BigDecimal("2.4")), 5, new ExpirationDate.ExpiresAt(LocalDate.now(SimulationContext.clock).plusYears(2)), new GeneralRules())
         );
 
         Stream<Commodity> commodities = l.stream().filter(Optional::isPresent).map(Optional::get);

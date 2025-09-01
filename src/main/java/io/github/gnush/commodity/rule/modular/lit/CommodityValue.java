@@ -3,6 +3,7 @@ package io.github.gnush.commodity.rule.modular.lit;
 import io.github.gnush.commodity.Commodity;
 import io.github.gnush.commodity.ExpirationDate;
 import io.github.gnush.commodity.rule.modular.Rule;
+import io.github.gnush.currency.Currency;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -21,6 +22,10 @@ public record CommodityValue<T>(
 
     public static @NotNull CommodityValue<Integer> quality() {
         return new CommodityValue<>(Commodity::getQuality);
+    }
+
+    public static @NotNull CommodityValue<Currency> basePrice() {
+        return new CommodityValue<>(c -> c.basePrice);
     }
 
     public static @NotNull CommodityValue<ExpirationDate> expirationDate() {

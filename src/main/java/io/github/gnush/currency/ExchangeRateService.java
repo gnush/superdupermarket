@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class ExchangeRateService {
+    /**
+     * Date → (From Currency → (To Currency → Exchange Rate))
+     */
     @NotNull
     private static final HashMap<LocalDate, HashMap<String, HashMap<String, BigDecimal>>> cache = new HashMap<>();
 

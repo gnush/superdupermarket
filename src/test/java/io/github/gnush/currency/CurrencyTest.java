@@ -2,9 +2,12 @@ package io.github.gnush.currency;
 
 import io.github.gnush.SimulationContext;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,12 +87,12 @@ public class CurrencyTest {
 
     @Test
     void eurNotEqualToUsd() {
-        assertNotEquals(new EUR(1), new USD(1));
+        assertNotEquals(new EUR(one), new USD(one));
     }
 
     @Test
     void usdNotEqualToEur() {
-        assertNotEquals(new USD(1), new EUR(1));
+        assertNotEquals(new USD(one), new EUR(one));
     }
 
     @Test
@@ -128,28 +131,77 @@ public class CurrencyTest {
     void addEurToUsd() {
         SimulationContext.setClock(LocalDate.of(2000, 1, 1));
 
-        assertEquals(
-                new USD(new BigDecimal("2.0046")),
-                new USD(1).add(new EUR(1))
-        );
+        try (MockedStatic<ExchangeRateService> exchangeRateService = Mockito.mockStatic(ExchangeRateService.class)){
+            exchangeRateService.when(() ->
+                    ExchangeRateService.exchangeRate(
+                            LocalDate.of(2000, 1, 1),
+                            "EUR",
+                            "USD"))
+                    .thenReturn(Optional.of(BigDecimal.TWO));
+
+            assertEquals(
+                    new USD(new BigDecimal("3")),
+                    new USD(one).add(new EUR(one))
+            );
+        }
     }
 
     @Test
     void addUsdToEur() {
         SimulationContext.setClock(LocalDate.of(2000, 1, 1));
 
-        assertEquals(
-                new EUR(new BigDecimal("1.99542")),
-                new EUR(1).add(new USD(1))
-        );
+        try (MockedStatic<ExchangeRateService> exchangeRateService = Mockito.mockStatic(ExchangeRateService.class)){
+            exchangeRateService.when(() ->
+                            ExchangeRateService.exchangeRate(
+                                    LocalDate.of(2000, 1, 1),
+                                    "USD",
+                                    "EUR"))
+                    .thenReturn(Optional.of(BigDecimal.TWO));
+
+            assertEquals(
+                    new EUR(new BigDecimal("4")),
+                    new EUR(one).add(new USD(oneDotFive))
+            );
+        }
     }
 
-//    @Test
-//    void addUsdToEur() {
-//        assertThrows(
-//                UnsupportedOperationException.class,
-//                () -> new EUR(1).add(new USD(1)),
-//                "Interchanging currencies is not supported"
-//        );
-//    }
+    @Test
+    void addEurToUSDCurrencyExchangeFails() {
+        SimulationContext.setClock(LocalDate.of(2000, 1, 1));
+
+        try (MockedStatic<ExchangeRateService> exchangeRateService = Mockito.mockStatic(ExchangeRateService.class)){
+            exchangeRateService.when(() ->
+                            ExchangeRateService.exchangeRate(
+                                    LocalDate.of(2000, 1, 1),
+                                    "USD",
+                                    "EUR"))
+                    .thenReturn(Optional.empty());
+
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> new USD(one).add(new EUR(one)),
+                    "Cannot exchange EUR to USD"
+            );
+        }
+    }
+
+    @Test
+    void addUsdToEurCurrencyExchangeFails() {
+        SimulationContext.setClock(LocalDate.of(2000, 1, 1));
+
+        try (MockedStatic<ExchangeRateService> exchangeRateService = Mockito.mockStatic(ExchangeRateService.class)){
+            exchangeRateService.when(() ->
+                            ExchangeRateService.exchangeRate(
+                                    LocalDate.of(2000, 1, 1),
+                                    "EUR",
+                                    "USD"))
+                    .thenReturn(Optional.empty());
+
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> new EUR(one).add(new USD(one)),
+                    "Cannot exchange USD to EUR"
+            );
+        }
+    }
 }

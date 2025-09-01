@@ -43,10 +43,7 @@ public class Commodity extends Observable<Commodity, CommodityChange> {
      * @return true if the Commodity should be removed, false otherwise.
      */
     public boolean toRemove() {
-        return switch (expirationDate) {
-            case ExpirationDate.DoesNotExpire _ -> false;
-            case ExpirationDate.ExpiresAt _ -> rules.toRemove(this);
-        };
+        return rules.toRemove(this);
     }
 
     /**
